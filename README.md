@@ -2,9 +2,9 @@
 
 **Electric Vehicle Routing Problem with Time Windows and Heterogeneous, Compatibility-Constrained Charging**
 
-[![Status](https://img.shields.io/badge/status-in%20progress-yellow)]()
-[![Python](https://img.shields.io/badge/python-3.10%2B-blue)]()
-[![Conference](https://img.shields.io/badge/target-ICEET%202026-orange)]()
+[![Status](https://img.shields.io/badge/status-in--progress-333333?style=flat-square)]()
+[![Python](https://img.shields.io/badge/python-3.10%2B-333333?style=flat-square)]()
+[![Conference](https://img.shields.io/badge/target-ICEET--2026-333333?style=flat-square)]()
 ---
 
 ## 📖 Overview

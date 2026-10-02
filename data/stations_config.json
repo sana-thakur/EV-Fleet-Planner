@@ -1,0 +1,8 @@
+[
+  {"station_id": "S_01_Panchpakhadi", "node_id": 2230881295, "plugs": {"LEV": 1, "CCS2": 2, "Type2": 1}, "charge_rate_kwh_per_hour": {"LEV": 3.3, "CCS2": 30.0, "Type2": 22.0}},
+  {"station_id": "S_02_Majiwada", "node_id": 4367762038, "plugs": {"LEV": 1, "CCS2": 1, "Type2": 0}, "charge_rate_kwh_per_hour": {"LEV": 3.3, "CCS2": 30.0, "Type2": 22.0}},
+  {"station_id": "S_03_Manpada", "node_id": 4213259528, "plugs": {"LEV": 0, "CCS2": 1, "Type2": 0}, "charge_rate_kwh_per_hour": {"LEV": 3.3, "CCS2": 30.0, "Type2": 22.0}},
+  {"station_id": "S_04_Kalwa", "node_id": 2299204488, "plugs": {"LEV": 2, "CCS2": 0, "Type2": 1}, "charge_rate_kwh_per_hour": {"LEV": 3.3, "CCS2": 30.0, "Type2": 22.0}},
+  {"station_id": "S_05_Kasarvadavali", "node_id": 2245095150, "plugs": {"LEV": 1, "CCS2": 1, "Type2": 0}, "charge_rate_kwh_per_hour": {"LEV": 3.3, "CCS2": 30.0, "Type2": 22.0}},
+  {"station_id": "S_06_Mumbra_SYN", "node_id": 10943525899, "plugs": {"LEV": 2, "CCS2": 1, "Type2": 1}, "charge_rate_kwh_per_hour": {"LEV": 3.3, "CCS2": 30.0, "Type2": 22.0}}
+]

@@ -89,8 +89,9 @@ def build(G):
     print(f"done. {G.number_of_nodes()} nodes, {G.number_of_edges()} edges.", flush=True)
     depot = nearest_node(G, *DEPOT_LATLON)
     stations = station_nodes(G)
-    pool_candidates = sorted(n for n in G.nodes if n != depot and n not in stations)
-    pool = sorted(random.Random(SEED).sample(pool_candidates, CUSTOMER_POOL_SIZE))
+    # pool is sampled independently of stations, so adding/moving stations never reshuffles customers
+    pool = sorted(random.Random(SEED).sample(sorted(n for n in G.nodes if n != depot), CUSTOMER_POOL_SIZE))
+    pool = [n for n in pool if n not in stations]
     key = [depot] + stations + pool
 
     print(f"Computing shortest paths between {len(key)} key nodes ...", flush=True)

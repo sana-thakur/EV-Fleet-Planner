@@ -60,3 +60,15 @@ def test_loads_into_workstream_a_instance(bench):
         time_min=bench["time_matrix"],
     )
     assert inst.dist(m["depot_node"], "S_test") == bench["distance_matrix"][str(m["depot_node"])][str(m["customer_pool"][-1])]
+
+
+def test_configs_valid(bench):
+    from data.validate_configs import validate
+
+    with open(os.path.join(os.path.dirname(PATH), "fleet_config.json")) as f:
+        fleet = json.load(f)
+    with open(os.path.join(os.path.dirname(PATH), "stations_config.json")) as f:
+        stations = json.load(f)
+    errors, _ = validate(fleet, stations, bench)
+    assert errors == []
+    assert [v["vehicle_type"] for v in fleet].count("e-2W") == 5 and len(fleet) == 10

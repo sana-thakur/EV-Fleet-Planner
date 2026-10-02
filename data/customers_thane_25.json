@@ -1,0 +1,205 @@
+{
+ "depot_node": 13418006658,
+ "customers": [
+  {
+   "node_id": 630707052,
+   "time_window": [
+    540,
+    1020
+   ],
+   "service_time_min": 5
+  },
+  {
+   "node_id": 1643401380,
+   "time_window": [
+    540,
+    1020
+   ],
+   "service_time_min": 5
+  },
+  {
+   "node_id": 1647016971,
+   "time_window": [
+    590,
+    650
+   ],
+   "service_time_min": 5
+  },
+  {
+   "node_id": 1647048989,
+   "time_window": [
+    870,
+    900
+   ],
+   "service_time_min": 5
+  },
+  {
+   "node_id": 2224872761,
+   "time_window": [
+    540,
+    1020
+   ],
+   "service_time_min": 5
+  },
+  {
+   "node_id": 2227589015,
+   "time_window": [
+    540,
+    1020
+   ],
+   "service_time_min": 5
+  },
+  {
+   "node_id": 2228293145,
+   "time_window": [
+    540,
+    1020
+   ],
+   "service_time_min": 5
+  },
+  {
+   "node_id": 2230389688,
+   "time_window": [
+    540,
+    1020
+   ],
+   "service_time_min": 5
+  },
+  {
+   "node_id": 2230881389,
+   "time_window": [
+    540,
+    1020
+   ],
+   "service_time_min": 5
+  },
+  {
+   "node_id": 2245094822,
+   "time_window": [
+    830,
+    890
+   ],
+   "service_time_min": 5
+  },
+  {
+   "node_id": 2493905821,
+   "time_window": [
+    540,
+    1020
+   ],
+   "service_time_min": 5
+  },
+  {
+   "node_id": 3797832335,
+   "time_window": [
+    540,
+    1020
+   ],
+   "service_time_min": 5
+  },
+  {
+   "node_id": 5428724533,
+   "time_window": [
+    540,
+    1020
+   ],
+   "service_time_min": 5
+  },
+  {
+   "node_id": 5806314880,
+   "time_window": [
+    540,
+    1020
+   ],
+   "service_time_min": 5
+  },
+  {
+   "node_id": 5861033680,
+   "time_window": [
+    900,
+    930
+   ],
+   "service_time_min": 5
+  },
+  {
+   "node_id": 7312496725,
+   "time_window": [
+    540,
+    1020
+   ],
+   "service_time_min": 5
+  },
+  {
+   "node_id": 8616914353,
+   "time_window": [
+    540,
+    1020
+   ],
+   "service_time_min": 5
+  },
+  {
+   "node_id": 8848434533,
+   "time_window": [
+    750,
+    780
+   ],
+   "service_time_min": 5
+  },
+  {
+   "node_id": 10277429698,
+   "time_window": [
+    790,
+    850
+   ],
+   "service_time_min": 5
+  },
+  {
+   "node_id": 11022637330,
+   "time_window": [
+    540,
+    1020
+   ],
+   "service_time_min": 5
+  },
+  {
+   "node_id": 11043864738,
+   "time_window": [
+    840,
+    870
+   ],
+   "service_time_min": 5
+  },
+  {
+   "node_id": 11043911714,
+   "time_window": [
+    540,
+    1020
+   ],
+   "service_time_min": 5
+  },
+  {
+   "node_id": 11059228343,
+   "time_window": [
+    540,
+    1020
+   ],
+   "service_time_min": 5
+  },
+  {
+   "node_id": 13262290338,
+   "time_window": [
+    540,
+    1020
+   ],
+   "service_time_min": 5
+  },
+  {
+   "node_id": 13801048474,
+   "time_window": [
+    570,
+    600
+   ],
+   "service_time_min": 5
+  }
+ ]
+}

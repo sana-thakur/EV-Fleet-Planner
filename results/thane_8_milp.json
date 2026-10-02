@@ -1,0 +1,76 @@
+{
+ "routes": [
+  {
+   "vehicle_id": "V_2W_001",
+   "stop_sequence": [
+    13418006658,
+    1643499291,
+    1647048989,
+    13898105689,
+    13418006658
+   ],
+   "planned_arrival_times": [
+    0.0,
+    750,
+    776.4,
+    830,
+    842.118
+   ],
+   "actual_arrival_times": [
+    0.0,
+    750,
+    776.4,
+    830,
+    842.118
+   ],
+   "charging_stops": []
+  },
+  {
+   "vehicle_id": "V_2W_004",
+   "stop_sequence": [
+    13418006658,
+    1643401380,
+    2440292896,
+    2237059896,
+    11043864738,
+    3797832335,
+    13418006658
+   ],
+   "planned_arrival_times": [
+    0.0,
+    630,
+    670,
+    708.488,
+    860,
+    880.522,
+    894.606
+   ],
+   "actual_arrival_times": [
+    0.0,
+    630,
+    670,
+    708.488,
+    860,
+    880.522,
+    894.606
+   ],
+   "charging_stops": []
+  }
+ ],
+ "unserved_customers": [],
+ "meta": {
+  "customers_file": "data/customers_thane_8.json",
+  "solver": "milp",
+  "simulated": false,
+  "info": {
+   "status": "Time limit reached",
+   "objective_km": 75.888,
+   "runtime_s": 300.2426545000053,
+   "mip_gap": 0.13992805281396314,
+   "n_vars": 2528,
+   "n_constraints": 6266,
+   "solver_name": "HiGHS"
+  },
+  "checker_feasible": true
+ }
+}

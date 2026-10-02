@@ -1,0 +1,72 @@
+{
+ "routes": [
+  {
+   "vehicle_id": "V_2W_001",
+   "stop_sequence": [
+    13418006658,
+    1643401380,
+    2440292896,
+    2237059896,
+    11043864738,
+    3797832335,
+    13418006658
+   ],
+   "planned_arrival_times": [
+    0.0,
+    630,
+    670,
+    708.488,
+    860,
+    880.522,
+    894.606
+   ],
+   "actual_arrival_times": [
+    0.0,
+    630,
+    670,
+    708.488,
+    860,
+    880.522,
+    894.606
+   ],
+   "charging_stops": []
+  },
+  {
+   "vehicle_id": "V_2W_002",
+   "stop_sequence": [
+    13418006658,
+    1643499291,
+    1647048989,
+    13898105689,
+    13418006658
+   ],
+   "planned_arrival_times": [
+    0.0,
+    750,
+    776.4,
+    830,
+    842.118
+   ],
+   "actual_arrival_times": [
+    0.0,
+    750,
+    776.4,
+    830,
+    842.118
+   ],
+   "charging_stops": []
+  }
+ ],
+ "unserved_customers": [],
+ "meta": {
+  "customers_file": "data/customers_thane_8.json",
+  "solver": "heuristic",
+  "simulated": false,
+  "info": {
+   "runtime_s": 0.06816850003087893,
+   "n_unserved": 0,
+   "internal_cost": 75.888
+  },
+  "checker_feasible": true
+ }
+}

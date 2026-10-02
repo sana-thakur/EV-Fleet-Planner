@@ -1,0 +1,69 @@
+{
+ "depot_node": 13418006658,
+ "customers": [
+  {
+   "node_id": 1643401380,
+   "time_window": [
+    630,
+    690
+   ],
+   "service_time_min": 5
+  },
+  {
+   "node_id": 1643499291,
+   "time_window": [
+    750,
+    810
+   ],
+   "service_time_min": 5
+  },
+  {
+   "node_id": 1647048989,
+   "time_window": [
+    540,
+    1020
+   ],
+   "service_time_min": 5
+  },
+  {
+   "node_id": 2237059896,
+   "time_window": [
+    700,
+    760
+   ],
+   "service_time_min": 5
+  },
+  {
+   "node_id": 2440292896,
+   "time_window": [
+    670,
+    730
+   ],
+   "service_time_min": 5
+  },
+  {
+   "node_id": 3797832335,
+   "time_window": [
+    540,
+    1020
+   ],
+   "service_time_min": 5
+  },
+  {
+   "node_id": 11043864738,
+   "time_window": [
+    860,
+    920
+   ],
+   "service_time_min": 5
+  },
+  {
+   "node_id": 13898105689,
+   "time_window": [
+    830,
+    890
+   ],
+   "service_time_min": 5
+  }
+ ]
+}

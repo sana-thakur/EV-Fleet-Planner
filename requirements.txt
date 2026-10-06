@@ -2,6 +2,7 @@ pulp>=4
 highspy
 pandas
 numpy
+networkx
 osmnx
 streamlit
 folium

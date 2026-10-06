@@ -15,14 +15,16 @@ Defines the heterogeneous fleet — vehicle types, battery capacities, and plug 
     "vehicle_type": "e-2W",
     "battery_capacity_kwh": 3.0,
     "energy_consumption_per_km": 0.025,
-    "compatible_plugs": ["LEV"]
+    "compatible_plugs": ["LEV"],
+    "initial_soc": 0.25
   },
   {
     "vehicle_id": "V_004",
     "vehicle_type": "e-4W",
     "battery_capacity_kwh": 30.0,
     "energy_consumption_per_km": 0.15,
-    "compatible_plugs": ["CCS2", "Type2"]
+    "compatible_plugs": ["CCS2", "Type2"],
+    "initial_soc": 0.25
   }
 ]
 ```

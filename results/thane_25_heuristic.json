@@ -4,48 +4,6 @@
       "vehicle_id": "V_2W_001",
       "stop_sequence": [
         13418006658,
-        2228293145,
-        2227589015,
-        13801048474,
-        10277429698,
-        5428724533,
-        1643401380,
-        8616914353,
-        2245094822,
-        13418006658
-      ],
-      "planned_arrival_times": [
-        0.0,
-        540,
-        554.196,
-        579.316,
-        790,
-        806.024,
-        822.888,
-        857.316,
-        865.432,
-        890.11
-      ],
-      "actual_arrival_times": [
-        0.0,
-        540,
-        554.196,
-        579.316,
-        790,
-        806.024,
-        822.888,
-        857.316,
-        865.432,
-        890.11
-      ],
-      "charging_stops": []
-    },
-    {
-      "vehicle_id": "V_2W_002",
-      "stop_sequence": [
-        13418006658,
-        2230881389,
-        11059228343,
         1647016971,
         2230389688,
         1647048989,
@@ -57,8 +15,6 @@
       ],
       "planned_arrival_times": [
         0.0,
-        540,
-        547.178,
         590,
         598.872,
         870,
@@ -70,8 +26,6 @@
       ],
       "actual_arrival_times": [
         0.0,
-        540,
-        547.178,
         590,
         598.872,
         870,
@@ -84,9 +38,10 @@
       "charging_stops": []
     },
     {
-      "vehicle_id": "V_2W_003",
+      "vehicle_id": "V_2W_002",
       "stop_sequence": [
         13418006658,
+        "S_04_Kalwa",
         3797832335,
         2224872761,
         7312496725,
@@ -99,6 +54,7 @@
       ],
       "planned_arrival_times": [
         0.0,
+        5.554,
         540,
         565.212,
         573.746,
@@ -111,6 +67,7 @@
       ],
       "actual_arrival_times": [
         0.0,
+        5.554,
         540,
         565.212,
         573.746,
@@ -121,7 +78,76 @@
         872.412,
         879.808
       ],
-      "charging_stops": []
+      "charging_stops": [
+        {
+          "station_id": "S_04_Kalwa",
+          "plug_type_used": "LEV",
+          "planned_arrival_time": 5.554,
+          "actual_arrival_time": 5.554,
+          "wait_time_minutes": 0.0,
+          "energy_requested_kwh": 0.5026,
+          "planned_charge_start": 5.554
+        }
+      ]
+    },
+    {
+      "vehicle_id": "V_4W_001",
+      "stop_sequence": [
+        13418006658,
+        "S_03_Manpada",
+        13801048474,
+        10277429698,
+        5428724533,
+        1643401380,
+        8616914353,
+        2245094822,
+        2227589015,
+        2228293145,
+        11059228343,
+        2230881389,
+        13418006658
+      ],
+      "planned_arrival_times": [
+        0.0,
+        8.644,
+        570,
+        790,
+        806.024,
+        822.888,
+        857.316,
+        865.432,
+        895.116,
+        908.71,
+        918.572,
+        925.65,
+        932.998
+      ],
+      "actual_arrival_times": [
+        0.0,
+        8.644,
+        570,
+        790,
+        806.024,
+        822.888,
+        857.316,
+        865.432,
+        895.116,
+        908.71,
+        918.572,
+        925.65,
+        932.998
+      ],
+      "charging_stops": [
+        {
+          "station_id": "S_03_Manpada",
+          "plug_type_used": "CCS2",
+          "planned_arrival_time": 8.644,
+          "actual_arrival_time": 8.644,
+          "wait_time_minutes": 0.0,
+          "energy_requested_kwh": 6.8812,
+          "planned_charge_start": 8.644
+        }
+      ]
     }
   ],
   "unserved_customers": [],
@@ -130,9 +156,9 @@
     "solver": "heuristic",
     "simulated": false,
     "info": {
-      "runtime_s": 1.858409299980849,
+      "runtime_s": 4.4646529000019655,
       "n_unserved": 0,
-      "internal_cost": 123.34700000000001
+      "internal_cost": 123.592
     },
     "checker_feasible": true
   }

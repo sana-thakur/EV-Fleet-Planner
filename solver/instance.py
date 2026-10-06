@@ -64,6 +64,14 @@ class Instance:
     def energy(self, vehicle_id: str, u: NodeId, v: NodeId) -> float:
         return self.dist(u, v) * self._vehicle[vehicle_id]["energy_consumption_per_km"]
 
+    def initial_battery(self, vehicle_id: str) -> float:
+        v = self._vehicle[vehicle_id]
+        if "initial_battery_kwh" in v:
+            return float(v["initial_battery_kwh"])
+        if "initial_soc" in v:
+            return float(v["initial_soc"]) * float(v["battery_capacity_kwh"])
+        return float(v["battery_capacity_kwh"])
+
     def charge_minutes(self, station_id: str, plug: str, kwh: float) -> float:
         return 60.0 * kwh / self.rate(station_id, plug)
 

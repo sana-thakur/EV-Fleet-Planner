@@ -125,7 +125,7 @@ def solve_milp(instance: Instance, time_limit_s: int = 300, max_station_visits: 
         prob += B[k, j] >= B[k, i] + c_i - e_ij - (Q[k] - e_ij) * (1 - v)
     for k in K:
         prob += tau[k, O] == 0
-        prob += B[k, O] == Q[k]  # every vehicle starts full
+        prob += B[k, O] == inst.initial_battery(k)  # vehicle starts at initial_soc / initial_battery
 
     # (C) charging limits, (D1) compatibility, (D2) charging duration
     for k in K:

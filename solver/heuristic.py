@@ -107,7 +107,7 @@ def _simulate(inst: Instance, vehicle_id: str, customers: list, timelines: dict,
         after_kwh[i] = after_kwh[i + 1] + e(targets[i], targets[i + 1])
 
     res = RouteResult()
-    cur, ready, battery = inst.depot_node, 0.0, q
+    cur, ready, battery = inst.depot_node, 0.0, inst.initial_battery(vehicle_id)
     for idx, target in enumerate(targets):
         is_last = idx == len(targets) - 1
         # look-ahead: after reaching target we must still reach a station or the depot

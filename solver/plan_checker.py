@@ -45,7 +45,7 @@ def check_plan(plan: dict, instance: Instance, tol: float = 1e-4) -> dict:
             continue
 
         q = inst.vehicle(k)["battery_capacity_kwh"]
-        battery, ready = q, times[0]
+        battery, ready = inst.initial_battery(k), times[0]
         pending = list(r.get("charging_stops", []))
         for idx in range(1, len(seq)):
             u, v, arrive = seq[idx - 1], seq[idx], times[idx]

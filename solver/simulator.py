@@ -90,7 +90,7 @@ def simulate_plan(plan: dict, instance: Instance) -> Tuple[dict, dict]:
             "sim_r": sim_r,
             "cs_by_index": {},
             "battery_capacity": v_info["battery_capacity_kwh"],
-            "current_battery": v_info["battery_capacity_kwh"],
+            "current_battery": instance.initial_battery(vid),
         }
 
         # Map charging stops to their stop_sequence indices

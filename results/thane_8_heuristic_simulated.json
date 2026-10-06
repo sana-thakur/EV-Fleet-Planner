@@ -6,6 +6,7 @@
         13418006658,
         1643401380,
         2440292896,
+        "S_06_Mumbra_SYN",
         2237059896,
         11043864738,
         3797832335,
@@ -15,7 +16,8 @@
         0.0,
         630,
         670,
-        708.488,
+        698.338,
+        725.0635,
         860,
         880.522,
         894.606
@@ -24,17 +26,30 @@
         0.0,
         630.0,
         639.648,
-        708.488,
-        726.644,
+        698.338,
+        725.0634545454545,
+        743.2194545454545,
         880.522,
         894.606
       ],
-      "charging_stops": [],
+      "charging_stops": [
+        {
+          "station_id": "S_06_Mumbra_SYN",
+          "plug_type_used": "LEV",
+          "planned_arrival_time": 698.338,
+          "actual_arrival_time": 698.338,
+          "wait_time_minutes": 0.0,
+          "energy_requested_kwh": 0.866,
+          "planned_charge_start": 698.338,
+          "actual_charge_start": 698.338,
+          "actual_charge_end": 714.0834545454545
+        }
+      ],
       "stranded": false,
       "stranding_reason": null
     },
     {
-      "vehicle_id": "V_2W_002",
+      "vehicle_id": "V_4W_001",
       "stop_sequence": [
         13418006658,
         1643499291,
@@ -67,8 +82,8 @@
     "solver": "heuristic (simulated)",
     "simulated": true,
     "sim_stats": {
-      "total_wait_time_minutes": 0,
-      "n_charging_stops": 0,
+      "total_wait_time_minutes": 0.0,
+      "n_charging_stops": 1,
       "n_stranded_vehicles": 0,
       "n_time_window_violations": 0,
       "total_late_minutes": 0.0,

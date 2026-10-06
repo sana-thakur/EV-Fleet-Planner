@@ -22,10 +22,12 @@ REALISTIC = {"e-2W": ((1.5, 6.0), (0.015, 0.05)),
              "e-4W": ((15.0, 60.0), (0.10, 0.25))}
 FLEET_KEYS = {"vehicle_id": str, "vehicle_type": str, "battery_capacity_kwh": (int, float),
               "energy_consumption_per_km": (int, float), "compatible_plugs": list}
+OPTIONAL_FLEET_KEYS = {"initial_soc": (int, float), "initial_battery_kwh": (int, float)}
 STATION_KEYS = {"station_id": str, "node_id": int, "plugs": dict, "charge_rate_kwh_per_hour": dict}
 
 
-def _schema(items, keys, label, errors):
+def _schema(items, keys, label, errors, optional_keys=None):
+    optional_keys = optional_keys or {}
     if not isinstance(items, list) or not items:
         errors.append(f"{label}: must be a non-empty JSON list")
         return False
@@ -35,7 +37,10 @@ def _schema(items, keys, label, errors):
                 errors.append(f"{label}[{i}]: missing '{key}'")
             elif not isinstance(item[key], typ) or isinstance(item[key], bool):
                 errors.append(f"{label}[{i}].{key}: wrong type {type(item[key]).__name__}")
-        extra = set(item) - set(keys)
+        for key, typ in optional_keys.items():
+            if key in item and (not isinstance(item[key], typ) or isinstance(item[key], bool)):
+                errors.append(f"{label}[{i}].{key}: wrong type {type(item[key]).__name__}")
+        extra = set(item) - set(keys) - set(optional_keys)
         if extra:
             errors.append(f"{label}[{i}]: unknown fields {sorted(extra)} (not in data_contract.md)")
     return not errors
@@ -43,7 +48,7 @@ def _schema(items, keys, label, errors):
 
 def validate(fleet, stations, bench=None):
     errors, warnings = [], []
-    if not (_schema(fleet, FLEET_KEYS, "fleet", errors) & _schema(stations, STATION_KEYS, "stations", errors)):
+    if not (_schema(fleet, FLEET_KEYS, "fleet", errors, OPTIONAL_FLEET_KEYS) & _schema(stations, STATION_KEYS, "stations", errors)):
         return errors, warnings
 
     for label, items, key in (("vehicle_id", fleet, "vehicle_id"), ("station_id", stations, "station_id")):

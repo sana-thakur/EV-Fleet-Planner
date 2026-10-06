@@ -36,21 +36,23 @@
       ],
       "actual_arrival_times": [
         0.0,
-        540,
+        540.0,
         553.594,
         561.88,
         572.304,
         590.26,
         601.548,
         607.488,
-        613.852,
-        624.288,
-        631.588,
-        820,
+        613.8520000000001,
+        624.2880000000001,
+        631.5880000000001,
+        638.474,
         827.986,
         835.382
       ],
-      "charging_stops": []
+      "charging_stops": [],
+      "stranded": false,
+      "stranding_reason": null
     },
     {
       "vehicle_id": "V_2W_002",
@@ -92,23 +94,25 @@
       ],
       "actual_arrival_times": [
         0.0,
-        540,
+        540.0,
         546.902,
-        610,
-        660,
-        690,
-        820,
+        553.2940000000001,
+        617.738,
+        666.936,
+        696.684,
         832.94,
-        920,
+        847.34,
         928.944,
-        942.094,
-        952.312,
-        961.468,
-        979.156,
-        988.234,
-        999.636
+        942.0939999999999,
+        952.3119999999999,
+        961.4679999999998,
+        979.1559999999998,
+        988.2339999999998,
+        999.6359999999999
       ],
-      "charging_stops": []
+      "charging_stops": [],
+      "stranded": false,
+      "stranding_reason": null
     },
     {
       "vehicle_id": "V_2W_003",
@@ -150,23 +154,25 @@
       ],
       "actual_arrival_times": [
         0.0,
-        540,
+        540.0,
         548.726,
         565.212,
         577.188,
         584.358,
-        593.82,
-        607.596,
-        680,
-        930,
+        593.8199999999999,
+        607.5959999999999,
+        614.1479999999999,
+        695.16,
         946.698,
         966.922,
         974.192,
         981.238,
-        1006.756,
-        1017.062
+        1006.7560000000001,
+        1017.0620000000001
       ],
-      "charging_stops": []
+      "charging_stops": [],
+      "stranded": false,
+      "stranding_reason": null
     },
     {
       "vehicle_id": "V_2W_004",
@@ -220,7 +226,7 @@
       ],
       "actual_arrival_times": [
         0.0,
-        600,
+        600.0,
         605.784,
         614.688,
         625.532,
@@ -229,12 +235,12 @@
         661.4,
         670.89,
         696.292,
-        702.56,
-        718.228,
-        730.366,
-        738.252,
-        930,
-        950,
+        702.5600000000001,
+        718.2280000000001,
+        730.3660000000001,
+        738.2520000000001,
+        748.2220000000001,
+        949.124,
         956.218,
         983.774,
         999.26,
@@ -242,18 +248,23 @@
         1017.748,
         1029.954
       ],
-      "charging_stops": []
+      "charging_stops": [],
+      "stranded": false,
+      "stranding_reason": null
     }
   ],
   "unserved_customers": [],
   "meta": {
     "customers_file": "data/customers_thane_60.json",
-    "solver": "heuristic",
-    "simulated": false,
-    "info": {
-      "runtime_s": 23.65660999994725,
-      "n_unserved": 0,
-      "internal_cost": 211.418
+    "solver": "heuristic (simulated)",
+    "simulated": true,
+    "sim_stats": {
+      "total_wait_time_minutes": 0,
+      "n_charging_stops": 0,
+      "n_stranded_vehicles": 0,
+      "n_time_window_violations": 0,
+      "total_late_minutes": 0.0,
+      "unserved_customer_count": 0
     },
     "checker_feasible": true
   }

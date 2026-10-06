@@ -22,14 +22,16 @@
       ],
       "actual_arrival_times": [
         0.0,
-        630,
-        670,
+        630.0,
+        639.648,
         708.488,
-        860,
+        726.644,
         880.522,
         894.606
       ],
-      "charging_stops": []
+      "charging_stops": [],
+      "stranded": false,
+      "stranding_reason": null
     },
     {
       "vehicle_id": "V_2W_002",
@@ -49,23 +51,28 @@
       ],
       "actual_arrival_times": [
         0.0,
-        750,
+        750.0,
         776.4,
-        830,
+        787.87,
         842.118
       ],
-      "charging_stops": []
+      "charging_stops": [],
+      "stranded": false,
+      "stranding_reason": null
     }
   ],
   "unserved_customers": [],
   "meta": {
     "customers_file": "data/customers_thane_8.json",
-    "solver": "heuristic",
-    "simulated": false,
-    "info": {
-      "runtime_s": 0.05503599997609854,
-      "n_unserved": 0,
-      "internal_cost": 75.888
+    "solver": "heuristic (simulated)",
+    "simulated": true,
+    "sim_stats": {
+      "total_wait_time_minutes": 0,
+      "n_charging_stops": 0,
+      "n_stranded_vehicles": 0,
+      "n_time_window_violations": 0,
+      "total_late_minutes": 0.0,
+      "unserved_customer_count": 0
     },
     "checker_feasible": true
   }

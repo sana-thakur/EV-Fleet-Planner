@@ -30,7 +30,7 @@ class StationPlugPool:
         self.plug_type = plug_type
         self.capacity = capacity
         self.active_units = 0
-        self.fifo_queue: deque = deque()  # stores (arrival_time, vehicle_id, stop_index, battery_kwh, cs_dict)
+        self.fifo_queue: deque = deque()  # stores (arrival_time, vehicle_id, stop_index, cs_dict)
 
 
 def simulate_plan(plan: dict, instance: Instance) -> Tuple[dict, dict]:
@@ -93,14 +93,38 @@ def simulate_plan(plan: dict, instance: Instance) -> Tuple[dict, dict]:
             "current_battery": instance.initial_battery(vid),
         }
 
-        # Map charging stops to their stop_sequence indices
-        cs_iter = iter(sim_r["charging_stops"])
-        for idx, stop in enumerate(seq):
-            if isinstance(stop, str) and stop in instance._station:
-                try:
-                    vehicle_states[vid]["cs_by_index"][idx] = next(cs_iter)
-                except StopIteration:
-                    pass
+        # Map charging stops to their stop_sequence indices (Fix E3)
+        station_visits = [
+            idx for idx, stop in enumerate(seq)
+            if isinstance(stop, str) and stop in instance._station
+        ]
+        visits_by_station: Dict[str, List[int]] = {}
+        for idx in station_visits:
+            sid = seq[idx]
+            visits_by_station.setdefault(sid, []).append(idx)
+
+        cs_by_station: Dict[str, List[dict]] = {}
+        for cs in sim_r["charging_stops"]:
+            sid = cs.get("station_id")
+            if sid:
+                cs_by_station.setdefault(sid, []).append(cs)
+
+        for sid, cs_items in cs_by_station.items():
+            avail_visits = list(visits_by_station.get(sid, []))
+            for cs in cs_items:
+                if not avail_visits:
+                    break
+                if "planned_arrival_time" in cs and planned_times:
+                    cs_plan_t = cs["planned_arrival_time"]
+                    best_v_idx = min(
+                        avail_visits,
+                        key=lambda v_i: abs((planned_times[v_i] if v_i < len(planned_times) else 0.0) - cs_plan_t),
+                    )
+                    vehicle_states[vid]["cs_by_index"][best_v_idx] = cs
+                    avail_visits.remove(best_v_idx)
+                else:
+                    best_v_idx = avail_visits.pop(0)
+                    vehicle_states[vid]["cs_by_index"][best_v_idx] = cs
 
     # Event Queue: items are (event_time, priority, event_type, payload)
     # Event types & priority tie-breakers:
@@ -115,22 +139,36 @@ def simulate_plan(plan: dict, instance: Instance) -> Tuple[dict, dict]:
         event_counter += 1
         heapq.heappush(event_queue, (time_val, event_priority, event_type, event_counter, payload))
 
+    def compute_departure_time(vid: str, from_idx: int, to_idx: int, finish_t: float) -> float:
+        """
+        Computes vehicle departure time from from_idx to to_idx (Fix E1).
+        Holds departure at previous stop so that arrival at customer is >= window_open.
+        """
+        sim_r = vehicle_states[vid]["sim_r"]
+        seq = sim_r["stop_sequence"]
+        planned_times = sim_r["planned_arrival_times"]
+        u, v = seq[from_idx], seq[to_idx]
+        travel_t = instance.time(u, v)
+
+        if v in instance.customer_window:
+            window_open, _ = instance.customer_window[v]
+            planned_arr = planned_times[to_idx] if to_idx < len(planned_times) else 0.0
+            target_arr = max(planned_arr, window_open)
+            return max(finish_t, target_arr - travel_t)
+        elif from_idx == 0 and to_idx < len(planned_times):
+            return max(finish_t, planned_times[to_idx] - travel_t)
+        else:
+            return finish_t
+
     # Schedule initial departure from depot for each vehicle at t = planned_departure or 0.0
     for r in plan["routes"]:
         vid = r["vehicle_id"]
         seq = r["stop_sequence"]
         if not seq:
             continue
-        planned_times = r.get("planned_arrival_times", [0.0] * len(seq))
-        # Vehicle departs depot at t0
-        if len(seq) > 1:
-            dt0 = instance.time(seq[0], seq[1])
-            depart_t = max(0.0, planned_times[1] - dt0) if len(planned_times) > 1 else 0.0
-        else:
-            depart_t = 0.0
-
         vehicle_states[vid]["sim_r"]["actual_arrival_times"][0] = 0.0
         if len(seq) > 1:
+            depart_t = compute_departure_time(vid, 0, 1, finish_t=0.0)
             push_event(
                 depart_t,
                 1,
@@ -225,10 +263,11 @@ def simulate_plan(plan: dict, instance: Instance) -> Tuple[dict, dict]:
                     total_late_minutes += late_min
 
                 serv_dur = instance.service_time.get(curr_stop, 5.0)
-                depart_t = service_start_t + serv_dur
+                finish_t = service_start_t + serv_dur
 
                 next_idx = stop_idx + 1
                 if next_idx < len(seq):
+                    depart_t = compute_departure_time(vid, stop_idx, next_idx, finish_t)
                     push_event(
                         depart_t,
                         1,
@@ -243,17 +282,32 @@ def simulate_plan(plan: dict, instance: Instance) -> Tuple[dict, dict]:
 
             # CASE B: Stop is Charging Station
             elif isinstance(curr_stop, str) and curr_stop in instance._station:
+                sid = curr_stop
                 cs = v_state["cs_by_index"].get(stop_idx)
+
+                # Fix E2: Pass-through station visit with no matching planned charging stop
                 if cs is None:
-                    # Generic station stop without specific CS metadata
-                    plug_type = instance.vehicle(vid)["compatible_plugs"][0]
-                    kwh_req = v_state["battery_capacity"] - v_state["current_battery"]
-                else:
-                    plug_type = cs["plug_type_used"]
-                    kwh_req = cs["energy_requested_kwh"]
+                    finish_t = arr_t
+                    next_idx = stop_idx + 1
+                    if next_idx < len(seq):
+                        depart_t = compute_departure_time(vid, stop_idx, next_idx, finish_t)
+                        push_event(
+                            depart_t,
+                            1,
+                            "VEHICLE_DEPARTURE",
+                            {
+                                "vehicle_id": vid,
+                                "from_stop_idx": stop_idx,
+                                "to_stop_idx": next_idx,
+                                "depart_time": depart_t,
+                            },
+                        )
+                    continue
+
+                plug_type = cs["plug_type_used"]
+                kwh_req = cs["energy_requested_kwh"]
 
                 # Check plug compatibility and station availability
-                sid = curr_stop
                 pool = pools.get((sid, plug_type))
 
                 if pool is None or pool.capacity == 0 or not instance.compatible(vid, plug_type):
@@ -267,8 +321,14 @@ def simulate_plan(plan: dict, instance: Instance) -> Tuple[dict, dict]:
                             unserved_set.add(node)
                     continue
 
-                if cs is not None:
-                    cs["actual_arrival_time"] = arr_t
+                cs["actual_arrival_time"] = arr_t
+
+                # Fix E15: Cap charging at remaining battery capacity
+                current_soc = v_state["current_battery"]
+                battery_cap = v_state["battery_capacity"]
+                remaining_cap = max(0.0, battery_cap - current_soc)
+                kwh_absorbed = max(0.0, min(kwh_req, remaining_cap))
+                charge_dur = instance.charge_minutes(sid, plug_type, kwh_absorbed)
 
                 # Check plug pool capacity
                 if pool.active_units < pool.capacity:
@@ -276,18 +336,15 @@ def simulate_plan(plan: dict, instance: Instance) -> Tuple[dict, dict]:
                     pool.active_units += 1
                     charge_start_t = arr_t
                     wait_t = 0.0
-
-                    charge_dur = instance.charge_minutes(sid, plug_type, kwh_req)
                     charge_end_t = charge_start_t + charge_dur
 
-                    if cs is not None:
-                        cs["wait_time_minutes"] = wait_t
-                        cs["actual_charge_start"] = charge_start_t
-                        cs["actual_charge_end"] = charge_end_t
+                    cs["wait_time_minutes"] = wait_t
+                    cs["actual_charge_start"] = charge_start_t
+                    cs["actual_charge_end"] = charge_end_t
 
-                    v_state["current_battery"] = min(v_state["battery_capacity"], v_state["current_battery"] + kwh_req)
+                    v_state["current_battery"] = min(battery_cap, current_soc + kwh_absorbed)
 
-                    # Schedule plug release and vehicle departure
+                    # Fix E1: Release plug immediately upon charge completion
                     push_event(
                         charge_end_t,
                         0,
@@ -298,22 +355,24 @@ def simulate_plan(plan: dict, instance: Instance) -> Tuple[dict, dict]:
                         },
                     )
 
+                    # Fix E1: Hold departure at previous stop (waiting off-plug)
                     next_idx = stop_idx + 1
                     if next_idx < len(seq):
+                        depart_t = compute_departure_time(vid, stop_idx, next_idx, charge_end_t)
                         push_event(
-                            charge_end_t,
+                            depart_t,
                             1,
                             "VEHICLE_DEPARTURE",
                             {
                                 "vehicle_id": vid,
                                 "from_stop_idx": stop_idx,
                                 "to_stop_idx": next_idx,
-                                "depart_time": charge_end_t,
+                                "depart_time": depart_t,
                             },
                         )
                 else:
                     # All plugs of this type busy -> enter FIFO queue
-                    pool.fifo_queue.append((arr_t, vid, stop_idx, kwh_req, cs))
+                    pool.fifo_queue.append((arr_t, vid, stop_idx, cs))
 
             # CASE C: Return to Depot
             else:
@@ -327,24 +386,28 @@ def simulate_plan(plan: dict, instance: Instance) -> Tuple[dict, dict]:
 
             if pool.fifo_queue:
                 # Pop next waiting vehicle from FIFO queue
-                arr_t, vid, stop_idx, kwh_req, cs = pool.fifo_queue.popleft()
+                arr_t, vid, stop_idx, cs = pool.fifo_queue.popleft()
                 v_state = vehicle_states[vid]
                 sim_r = v_state["sim_r"]
 
                 charge_start_t = event_time
                 wait_t = charge_start_t - arr_t
 
-                charge_dur = instance.charge_minutes(sid, plug_type, kwh_req)
+                # Fix E15: Cap charging at remaining battery capacity
+                current_soc = v_state["current_battery"]
+                battery_cap = v_state["battery_capacity"]
+                remaining_cap = max(0.0, battery_cap - current_soc)
+                kwh_absorbed = max(0.0, min(cs["energy_requested_kwh"], remaining_cap))
+                charge_dur = instance.charge_minutes(sid, plug_type, kwh_absorbed)
                 charge_end_t = charge_start_t + charge_dur
 
-                if cs is not None:
-                    cs["wait_time_minutes"] = wait_t
-                    cs["actual_charge_start"] = charge_start_t
-                    cs["actual_charge_end"] = charge_end_t
+                cs["wait_time_minutes"] = wait_t
+                cs["actual_charge_start"] = charge_start_t
+                cs["actual_charge_end"] = charge_end_t
 
-                v_state["current_battery"] = min(v_state["battery_capacity"], v_state["current_battery"] + kwh_req)
+                v_state["current_battery"] = min(battery_cap, current_soc + kwh_absorbed)
 
-                # Re-schedule plug release for this new occupant
+                # Fix E1: Re-schedule plug release for this new occupant immediately upon charge completion
                 push_event(
                     charge_end_t,
                     0,
@@ -355,19 +418,20 @@ def simulate_plan(plan: dict, instance: Instance) -> Tuple[dict, dict]:
                     },
                 )
 
-                # Schedule vehicle departure after charging
+                # Fix E1: Schedule vehicle departure (waiting off-plug if held)
                 seq = sim_r["stop_sequence"]
                 next_idx = stop_idx + 1
                 if next_idx < len(seq):
+                    depart_t = compute_departure_time(vid, stop_idx, next_idx, charge_end_t)
                     push_event(
-                        charge_end_t,
+                        depart_t,
                         1,
                         "VEHICLE_DEPARTURE",
                         {
                             "vehicle_id": vid,
                             "from_stop_idx": stop_idx,
                             "to_stop_idx": next_idx,
-                            "depart_time": charge_end_t,
+                            "depart_time": depart_t,
                         },
                     )
             else:

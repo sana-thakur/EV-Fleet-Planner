@@ -107,7 +107,7 @@ def _simulate(inst: Instance, vehicle_id: str, customers: list, timelines: dict,
         after_kwh[i] = after_kwh[i + 1] + e(targets[i], targets[i + 1])
 
     res = RouteResult()
-    cur, ready, battery = inst.depot_node, 0.0, inst.initial_battery(vehicle_id)
+    cur, ready, battery = inst.depot_node, inst.depot_open_min, inst.initial_battery(vehicle_id)
     for idx, target in enumerate(targets):
         is_last = idx == len(targets) - 1
         # look-ahead: after reaching target we must still reach a station or the depot
@@ -313,7 +313,7 @@ def solve_heuristic(instance: Instance, station_overrides: dict | None = None,
             continue
         res = st.results[k]
         stops = [inst.depot_node] + [s for s, _ in res.stops]
-        times = [0.0] + [round(t, 4) for _, t in res.stops]
+        times = [inst.depot_open_min] + [round(t, 4) for _, t in res.stops]
         charging = [{
             "station_id": sid, "plug_type_used": p,
             "planned_arrival_time": round(start, 4), "actual_arrival_time": round(start, 4),

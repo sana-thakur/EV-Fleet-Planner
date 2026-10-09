@@ -103,3 +103,30 @@ def test_waiting_at_previous_stop_is_allowed():
     plan = base_plan()
     _set(plan, "V_4W", planned_arrival_times=[0.0, 140.0, 165.0, 320.0])  # departs 10 min late
     assert check_plan(plan, make_toy_instance())["feasible"]
+
+
+def test_early_arrival_is_waiting_not_a_violation():
+    """E9: one time-window rule (lateness only) in objective.py and plan_checker."""
+    from solver.objective import calculate_route_cost, late_minutes
+
+    assert late_minutes(100.0, (120, 180)) == 0.0 and late_minutes(190.0, (120, 180)) == 10.0
+    inst = make_toy_instance()
+    plan = base_plan()
+    _set(plan, "V_4W", planned_arrival_times=[0.0, 130.0, 155.0, 310.0])
+    plan["routes"][2]["actual_arrival_times"] = [0.0, 100.0, 140.0, 310.0]  # early at both customers
+    windows = {str(c): list(w) for c, w in inst.customer_window.items()}
+    cost = calculate_route_cost(plan["routes"], inst.dist_km, windows)
+    assert cost["raw_total_tw_violation_minutes"] == 0.0
+    plan["routes"][2]["actual_arrival_times"] = [0.0, 150.0, 180.0, 330.0]  # 5 min late at each
+    assert calculate_route_cost(plan["routes"], inst.dist_km, windows)["raw_total_tw_violation_minutes"] == 10.0
+
+
+def test_leaving_before_depot_opens_is_flagged():
+    """E10: depot opening time."""
+    import dataclasses
+
+    inst = dataclasses.replace(make_toy_instance(), depot_open_min=10.0)
+    res = check_plan(base_plan(), inst)  # base plan leaves at 0.0
+    # one "leaves depot before it opens" per route (later stops then cascade as impossible times)
+    early = [v for v in res["violations"] if "before it opens" in v["detail"]]
+    assert sorted(v["vehicle_id"] for v in early) == ["V_2W_A", "V_2W_B", "V_4W"] and not res["feasible"]

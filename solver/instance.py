@@ -32,6 +32,7 @@ class Instance:
     dist_km: dict  # dist_km[str(u)][str(v)]
     time_min: dict  # time_min[str(u)][str(v)]
     horizon_min: float
+    depot_open_min: float = 0.0  # earliest time a vehicle may leave the depot (minutes from midnight)
     _station: dict = field(init=False, repr=False, compare=False)
     _vehicle: dict = field(init=False, repr=False, compare=False)
 
@@ -100,6 +101,7 @@ def build_instance(
     dist_km: dict,
     time_min: dict,
     horizon_min: float | None = None,
+    depot_open_min: float = 0.0,
 ) -> Instance:
     """Validate raw data and build an Instance. `customers` use the temporary customers-file shape."""
     nodes = set(dist_km)
@@ -121,6 +123,8 @@ def build_instance(
             errors.append(f"vehicle {v['vehicle_id']} has no compatible plug type available anywhere")
     if set(time_min) != nodes:
         errors.append("time matrix and distance matrix have different node sets")
+    if depot_open_min < 0:
+        errors.append(f"depot_open_min must be >= 0, got {depot_open_min}")
     if errors:
         raise ValueError("Invalid instance:\n  " + "\n  ".join(errors))
 
@@ -136,6 +140,7 @@ def build_instance(
         dist_km=_alias_stations(dist_km, stations),
         time_min=_alias_stations(time_min, stations),
         horizon_min=horizon_min if horizon_min is not None else max((b for _, b in windows.values()), default=0) + 120,
+        depot_open_min=float(depot_open_min),
     )
 
 
@@ -146,7 +151,8 @@ def load_instance(benchmark_path: str, fleet_path: str, stations_path: str, cust
     ASSUMED benchmark shape (thane_benchmark.json has no contract yet — confirm with Workstream C):
         {"distance_matrix": {"<node>": {"<node>": km}}, "time_matrix": {"<node>": {"<node>": minutes}}}
     TEMPORARY customers shape (until added to docs/data_contract.md):
-        {"depot_node": <node_id>, "customers": [{"node_id": ..., "time_window": [a, b], "service_time_min": 5}]}
+        {"depot_node": <node_id>, "depot_open_min": 480,   # optional, default 0
+         "customers": [{"node_id": ..., "time_window": [a, b], "service_time_min": 5}]}
     """
     def read(path):
         with open(path) as f:
@@ -160,6 +166,7 @@ def load_instance(benchmark_path: str, fleet_path: str, stations_path: str, cust
         vehicles=read(fleet_path),
         dist_km=bench["distance_matrix"],
         time_min=bench["time_matrix"],
+        depot_open_min=cust.get("depot_open_min", 0.0),
     )
 
 

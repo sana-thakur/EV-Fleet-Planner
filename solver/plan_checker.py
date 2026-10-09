@@ -16,6 +16,7 @@ from __future__ import annotations
 from collections import Counter
 
 from solver.instance import Instance
+from solver.objective import late_minutes
 
 TIME_TOL = 0.01  # minutes
 
@@ -46,6 +47,9 @@ def check_plan(plan: dict, instance: Instance, tol: float = 1e-4) -> dict:
 
         q = inst.vehicle(k)["battery_capacity_kwh"]
         battery, ready = inst.initial_battery(k), times[0]
+        if times[0] < inst.depot_open_min - TIME_TOL:
+            bad("ARRIVAL_TIME_MISMATCH", k, seq[0], f"leaves depot at {times[0]:.2f}, before it opens at {inst.depot_open_min}")
+            ready = inst.depot_open_min
         pending = list(r.get("charging_stops", []))
         for idx in range(1, len(seq)):
             u, v, arrive = seq[idx - 1], seq[idx], times[idx]
@@ -61,7 +65,7 @@ def check_plan(plan: dict, instance: Instance, tol: float = 1e-4) -> dict:
             if v in customers:
                 served[v] += 1
                 a, b = inst.customer_window[v]
-                if arrive > b + TIME_TOL:
+                if late_minutes(arrive, (a, b)) > TIME_TOL:
                     bad("TIME_WINDOW_LATE", k, v, f"arrive {arrive:.2f} > b={b}")
                 ready = max(arrive, a) + inst.service_time[v]
             elif v in station_ids and pending and pending[0]["station_id"] == v:

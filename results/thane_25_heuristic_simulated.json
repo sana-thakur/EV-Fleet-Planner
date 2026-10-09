@@ -14,7 +14,7 @@
         13418006658
       ],
       "planned_arrival_times": [
-        0.0,
+        480.0,
         590,
         598.872,
         870,
@@ -55,8 +55,8 @@
         13418006658
       ],
       "planned_arrival_times": [
-        0.0,
-        5.554,
+        480.0,
+        485.554,
         540,
         565.212,
         573.746,
@@ -69,8 +69,8 @@
       ],
       "actual_arrival_times": [
         0.0,
-        5.554,
-        18.91018181818182,
+        485.554,
+        498.9101818181818,
         565.212,
         573.746,
         590.472,
@@ -84,13 +84,13 @@
         {
           "station_id": "S_04_Kalwa",
           "plug_type_used": "LEV",
-          "planned_arrival_time": 5.554,
-          "actual_arrival_time": 5.554,
+          "planned_arrival_time": 485.554,
+          "actual_arrival_time": 485.554,
           "wait_time_minutes": 0.0,
           "energy_requested_kwh": 0.5026,
-          "planned_charge_start": 5.554,
-          "actual_charge_start": 5.554,
-          "actual_charge_end": 14.692181818181819
+          "planned_charge_start": 485.554,
+          "actual_charge_start": 485.554,
+          "actual_charge_end": 494.6921818181818
         }
       ],
       "stranded": false,
@@ -114,8 +114,8 @@
         13418006658
       ],
       "planned_arrival_times": [
-        0.0,
-        8.644,
+        480.0,
+        488.644,
         570,
         790,
         806.024,
@@ -130,8 +130,8 @@
       ],
       "actual_arrival_times": [
         0.0,
-        8.644,
-        29.0064,
+        488.644,
+        509.00640000000004,
         596.562,
         806.024,
         822.888,
@@ -147,13 +147,13 @@
         {
           "station_id": "S_03_Manpada",
           "plug_type_used": "CCS2",
-          "planned_arrival_time": 8.644,
-          "actual_arrival_time": 8.644,
+          "planned_arrival_time": 488.644,
+          "actual_arrival_time": 488.644,
           "wait_time_minutes": 0.0,
           "energy_requested_kwh": 6.8812,
-          "planned_charge_start": 8.644,
-          "actual_charge_start": 8.644,
-          "actual_charge_end": 22.406399999999998
+          "planned_charge_start": 488.644,
+          "actual_charge_start": 488.644,
+          "actual_charge_end": 502.4064
         }
       ],
       "stranded": false,

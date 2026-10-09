@@ -1,5 +1,6 @@
 {
  "depot_node": 13418006658,
+ "depot_open_min": 480,
  "customers": [
   {
    "node_id": 1643401380,

@@ -130,3 +130,29 @@ def test_toy_passes_plan_checker(toy_solution):
     inst, plan, _ = toy_solution
     res = check_plan(plan, inst)
     assert res["feasible"], res["violations"]
+
+
+def test_depot_opening_time_respected():
+    """E10: no vehicle leaves before the depot opens, in either solver."""
+    from solver.heuristic import solve_heuristic
+
+    inst = dataclasses.replace(make_random_instance(6, 3, 2), depot_open_min=60.0)
+    for solve in (lambda i: solve_milp(i, time_limit_s=60), solve_heuristic):
+        plan, _ = solve(inst)
+        for r in plan["routes"]:
+            assert r["planned_arrival_times"][0] == 60.0
+            depart = r["planned_arrival_times"][1] - inst.time(r["stop_sequence"][0], r["stop_sequence"][1])
+            assert depart >= 60.0 - 1e-6
+        _check_basic(plan, inst)
+
+
+@pytest.mark.parametrize("seed", [1, 2, 3])
+def test_no_pass_through_station_visits(seed):
+    """E13: every station in a MILP route has a charging stop, and objective_km matches the routes."""
+    inst = make_random_instance(8, 3, seed)
+    plan, info = solve_milp(inst, time_limit_s=5)  # short limit: the case that used to leave detours
+    for r in plan["routes"]:
+        assert sum(isinstance(s, str) for s in r["stop_sequence"]) == len(r["charging_stops"])
+    km = sum(inst.dist(u, v) for r in plan["routes"] for u, v in zip(r["stop_sequence"], r["stop_sequence"][1:]))
+    assert info["objective_km"] == pytest.approx(km)
+    _check_basic(plan, inst)

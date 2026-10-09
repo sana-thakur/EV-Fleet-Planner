@@ -1,83 +1,74 @@
 {
   "routes": [
     {
-      "vehicle_id": "V_2W_005",
+      "vehicle_id": "V_4W_001",
       "stop_sequence": [
         13418006658,
-        "S_02_Majiwada",
-        2440292896,
         1643401380,
+        2440292896,
+        "S_06_Mumbra_SYN",
         2237059896,
         11043864738,
-        "S_06_Mumbra_SYN",
-        "S_04_Kalwa",
         3797832335,
         13418006658
       ],
       "planned_arrival_times": [
-        0.0,
-        5.934,
+        480.0,
+        630,
         670,
-        679.648,
-        713.636,
+        698.338,
+        715.7092,
         860,
-        871.574,
-        883.722,
-        887.94,
-        902.024
+        880.522,
+        894.606
       ],
       "actual_arrival_times": [
         0.0,
-        5.934,
-        45.827636363636366,
-        679.648,
-        713.636,
-        731.7919999999999,
-        871.574,
-        937.6745454545454,
-        945.6473818181818,
-        959.7313818181817
+        630.0,
+        639.648,
+        698.338,
+        715.7092,
+        733.8652,
+        880.522,
+        894.606
       ],
       "charging_stops": [
         {
-          "station_id": "S_02_Majiwada",
-          "plug_type_used": "LEV",
-          "planned_arrival_time": 5.934,
-          "actual_arrival_time": 5.934,
+          "station_id": "S_06_Mumbra_SYN",
+          "plug_type_used": "CCS2",
+          "planned_arrival_time": 698.338,
+          "actual_arrival_time": 698.338,
           "wait_time_minutes": 0.0,
-          "energy_requested_kwh": 0.9693,
-          "planned_charge_start": 5.934,
-          "actual_charge_start": 5.934,
-          "actual_charge_end": 23.557636363636366
+          "energy_requested_kwh": 3.1956,
+          "planned_charge_start": 698.338,
+          "actual_charge_start": 698.338,
+          "actual_charge_end": 704.7292
         }
       ],
       "stranded": false,
       "stranding_reason": null
     },
     {
-      "vehicle_id": "V_4W_001",
+      "vehicle_id": "V_4W_002",
       "stop_sequence": [
         13418006658,
         1643499291,
-        "S_01_Panchpakhadi",
         1647048989,
         13898105689,
         13418006658
       ],
       "planned_arrival_times": [
-        0.0,
+        480.0,
         750,
-        775.338,
-        778.752,
+        776.4,
         830,
         842.118
       ],
       "actual_arrival_times": [
         0.0,
         750.0,
-        775.338,
-        817.527196,
-        828.997196,
+        776.4,
+        787.87,
         842.118
       ],
       "charging_stops": [],

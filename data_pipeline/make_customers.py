@@ -20,6 +20,7 @@ SIZES = [8, 25, 60]  # 8: small enough for the MILP; 25: default daily load; 60:
 SEED = 7
 PRIORITY_SHARE = 0.3
 SERVICE_MIN = 5
+DEPOT_OPEN_MIN = 480  # 08:00: vehicles leave the depot no earlier than this
 
 
 def make(pool, depot, n, seed):
@@ -32,7 +33,7 @@ def make(pool, depot, n, seed):
         else:
             window = [540, 1020]
         customers.append({"node_id": node, "time_window": window, "service_time_min": SERVICE_MIN})
-    return {"depot_node": depot, "customers": customers}
+    return {"depot_node": depot, "depot_open_min": DEPOT_OPEN_MIN, "customers": customers}
 
 
 def main():

@@ -27,7 +27,7 @@ RUNS = [
     (25, "heuristic"),
     (60, "heuristic"),
 ]
-MILP_TIME_LIMIT_S = 30
+MILP_TIME_LIMIT_S = 300  # 30 s left non-optimal routes with pointless station detours
 
 
 def main():

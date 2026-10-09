@@ -13,7 +13,7 @@
         13418006658
       ],
       "planned_arrival_times": [
-        0.0,
+        480.0,
         630,
         670,
         698.338,
@@ -23,7 +23,7 @@
         894.606
       ],
       "actual_arrival_times": [
-        0.0,
+        480.0,
         630,
         670,
         698.338,
@@ -54,14 +54,14 @@
         13418006658
       ],
       "planned_arrival_times": [
-        0.0,
+        480.0,
         750,
         776.4,
         830,
         842.118
       ],
       "actual_arrival_times": [
-        0.0,
+        480.0,
         750,
         776.4,
         830,
@@ -76,7 +76,7 @@
     "solver": "heuristic",
     "simulated": false,
     "info": {
-      "runtime_s": 0.12886130006518215,
+      "runtime_s": 0.08262395800556988,
       "n_unserved": 0,
       "internal_cost": 76.30300000000001
     },

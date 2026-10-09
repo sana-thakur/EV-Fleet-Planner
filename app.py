@@ -60,14 +60,17 @@ def road_path(u, v):
 
 
 def charging_intervals(plan, inst):
-    """(vehicle, station, plug, start, end) for every charging stop. Start = actual arrival + planned queue gap."""
+    """(vehicle, station, plug, start, end) for every charging stop. Simulated plans carry the simulator's
+    actual_charge_start/end; planned ones use planned_charge_start + charging duration."""
     out = []
     for r in plan["routes"]:
         for cs in r.get("charging_stops", []):
-            planned_gap = cs.get("planned_charge_start", cs["planned_arrival_time"]) - cs["planned_arrival_time"]
-            start = cs.get("actual_arrival_time", cs["planned_arrival_time"]) + planned_gap + cs.get("wait_time_minutes", 0.0)
-            dur = inst.charge_minutes(cs["station_id"], cs["plug_type_used"], cs["energy_requested_kwh"])
-            out.append((r["vehicle_id"], cs["station_id"], cs["plug_type_used"], start, start + dur))
+            if cs.get("actual_charge_start") is not None and cs.get("actual_charge_end") is not None:
+                start, end = cs["actual_charge_start"], cs["actual_charge_end"]
+            else:
+                start = cs.get("planned_charge_start", cs["planned_arrival_time"])
+                end = start + inst.charge_minutes(cs["station_id"], cs["plug_type_used"], cs["energy_requested_kwh"])
+            out.append((r["vehicle_id"], cs["station_id"], cs["plug_type_used"], start, end))
     return out
 
 

@@ -19,9 +19,16 @@ from typing import List, Dict, Any, Optional
 DEFAULT_WEIGHTS: Dict[str, float] = {
     "distance": 1.0,             # Base routing cost per unit distance
     "wait_time": 0.5,            # Penalty per minute idling at a charger
-    "time_window_penalty": 1000.0,   # Penalty per minute late/early outside [a_i, b_i]
+    "time_window_penalty": 1000.0,   # Penalty per minute LATE (after b_i); early arrival = waiting, not a violation
     "unserved_customer": 5000.0,     # Penalty per customer never reached
 }
+
+
+def late_minutes(arrival_time: float, window) -> float:
+    """Minutes after the window closes. Arriving before a_i is not a violation: the vehicle
+    simply waits (docs/model_formulation.md). The single time-window rule shared by the
+    objective, plan_checker and simulator."""
+    return max(0.0, arrival_time - window[1])
 
 
 def calculate_route_cost(
@@ -75,11 +82,7 @@ def calculate_route_cost(
             window = customer_windows.get(str(node_id))
             if window is None:
                 continue  # not a customer node (depot or station) — no window to check
-            earliest, latest = window
-            if arrival_time < earliest:
-                total_tw_violation_minutes += (earliest - arrival_time)
-            elif arrival_time > latest:
-                total_tw_violation_minutes += (arrival_time - latest)
+            total_tw_violation_minutes += late_minutes(arrival_time, window)
 
         # 3. Sum queue wait time recorded at each charging stop.
         for stop in vehicle_route.get("charging_stops", []):

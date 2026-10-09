@@ -124,7 +124,7 @@ def solve_milp(instance: Instance, time_limit_s: int = 300, max_station_visits: 
         # Lower side: worst case B_j = 0, B_i + c_i = Q -> M = Q - e_ij.
         prob += B[k, j] >= B[k, i] + c_i - e_ij - (Q[k] - e_ij) * (1 - v)
     for k in K:
-        prob += tau[k, O] == 0
+        prob += tau[k, O] == inst.depot_open_min  # vehicles leave no earlier than the depot opens
         prob += B[k, O] == inst.initial_battery(k)  # vehicle starts at initial_soc / initial_battery
 
     # (C) charging limits, (D1) compatibility, (D2) charging duration
@@ -180,7 +180,8 @@ def solve_milp(instance: Instance, time_limit_s: int = 300, max_station_visits: 
             continue  # o -> e: vehicle not dispatched
         routes.append(_route(inst, k, seq, loc, a, svc, tau, c, y, usable, val))
 
-    objective_km = sum(inst.dist(loc(i), loc(j)) for (k, i, j), v in x.items() if val(v) > 0.5)
+    # km of the routes actually returned (pass-through station visits are dropped in _route)
+    objective_km = sum(inst.dist(u, v) for r in routes for u, v in zip(r["stop_sequence"], r["stop_sequence"][1:]))
     return {"routes": routes, "unserved_customers": []}, {
         "status": status,
         "objective_km": objective_km,
@@ -195,9 +196,12 @@ def solve_milp(instance: Instance, time_limit_s: int = 300, max_station_visits: 
 def _route(inst, k, seq, loc, a, svc, tau, c, y, usable, val) -> dict:
     """Rebuild one vehicle's plan. Customers are served as early as possible (>= a_i);
     stations keep the MILP's charge start (capacity-feasible). Pushing customers earlier
-    never delays later stops, so the schedule stays feasible."""
-    stops, times, charging = [inst.depot_node], [0.0], []
-    ready = 0.0
+    never delays later stops, so the schedule stays feasible.
+    Station visits with no charge (pass-through, typical of time-limited solves) are dropped:
+    distances are shortest paths, so skipping one never adds km, energy or time."""
+    seq = [n for n in seq if n[0] != "s" or round(val(c[k, n]), 4) > 0]
+    stops, times, charging = [inst.depot_node], [inst.depot_open_min], []
+    ready = inst.depot_open_min
     for prev, n in zip(seq, seq[1:]):
         arrive = ready + inst.time(loc(prev), loc(n))
         if n[0] == "c":
@@ -206,17 +210,14 @@ def _route(inst, k, seq, loc, a, svc, tau, c, y, usable, val) -> dict:
         elif n[0] == "s":
             arrive = max(arrive, val(tau[k, n]))
             kwh = round(val(c[k, n]), 4)
-            plug = next(p for p in usable[k, n] if val(y[k, n, p]) > 0.5) if kwh > 0 else None
-            if plug is None:  # visited but not charged: pass-through, no charging stop
-                ready = arrive
-            else:
-                charging.append({
-                    "station_id": n[1], "plug_type_used": plug,
-                    "planned_arrival_time": round(arrive, 4), "actual_arrival_time": round(arrive, 4),
-                    "wait_time_minutes": 0.0, "energy_requested_kwh": kwh,
-                    "planned_charge_start": round(arrive, 4),
-                })
-                ready = arrive + inst.charge_minutes(n[1], plug, kwh)
+            plug = next(p for p in usable[k, n] if val(y[k, n, p]) > 0.5)
+            charging.append({
+                "station_id": n[1], "plug_type_used": plug,
+                "planned_arrival_time": round(arrive, 4), "actual_arrival_time": round(arrive, 4),
+                "wait_time_minutes": 0.0, "energy_requested_kwh": kwh,
+                "planned_charge_start": round(arrive, 4),
+            })
+            ready = arrive + inst.charge_minutes(n[1], plug, kwh)
         stops.append(loc(n))
         times.append(round(arrive, 4))
     return {"vehicle_id": k, "stop_sequence": stops, "planned_arrival_times": times,

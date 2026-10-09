@@ -14,7 +14,7 @@
         13418006658
       ],
       "planned_arrival_times": [
-        0.0,
+        480.0,
         590,
         598.872,
         870,
@@ -25,7 +25,7 @@
         916.866
       ],
       "actual_arrival_times": [
-        0.0,
+        480.0,
         590,
         598.872,
         870,
@@ -53,8 +53,8 @@
         13418006658
       ],
       "planned_arrival_times": [
-        0.0,
-        5.554,
+        480.0,
+        485.554,
         540,
         565.212,
         573.746,
@@ -66,8 +66,8 @@
         879.808
       ],
       "actual_arrival_times": [
-        0.0,
-        5.554,
+        480.0,
+        485.554,
         540,
         565.212,
         573.746,
@@ -82,11 +82,11 @@
         {
           "station_id": "S_04_Kalwa",
           "plug_type_used": "LEV",
-          "planned_arrival_time": 5.554,
-          "actual_arrival_time": 5.554,
+          "planned_arrival_time": 485.554,
+          "actual_arrival_time": 485.554,
           "wait_time_minutes": 0.0,
           "energy_requested_kwh": 0.5026,
-          "planned_charge_start": 5.554
+          "planned_charge_start": 485.554
         }
       ]
     },
@@ -108,8 +108,8 @@
         13418006658
       ],
       "planned_arrival_times": [
-        0.0,
-        8.644,
+        480.0,
+        488.644,
         570,
         790,
         806.024,
@@ -123,8 +123,8 @@
         932.998
       ],
       "actual_arrival_times": [
-        0.0,
-        8.644,
+        480.0,
+        488.644,
         570,
         790,
         806.024,
@@ -141,11 +141,11 @@
         {
           "station_id": "S_03_Manpada",
           "plug_type_used": "CCS2",
-          "planned_arrival_time": 8.644,
-          "actual_arrival_time": 8.644,
+          "planned_arrival_time": 488.644,
+          "actual_arrival_time": 488.644,
           "wait_time_minutes": 0.0,
           "energy_requested_kwh": 6.8812,
-          "planned_charge_start": 8.644
+          "planned_charge_start": 488.644
         }
       ]
     }
@@ -156,7 +156,7 @@
     "solver": "heuristic",
     "simulated": false,
     "info": {
-      "runtime_s": 4.4646529000019655,
+      "runtime_s": 3.019564124988392,
       "n_unserved": 0,
       "internal_cost": 123.592
     },

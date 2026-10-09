@@ -1,78 +1,69 @@
 {
   "routes": [
     {
-      "vehicle_id": "V_2W_005",
+      "vehicle_id": "V_4W_001",
       "stop_sequence": [
         13418006658,
-        "S_02_Majiwada",
-        2440292896,
         1643401380,
+        2440292896,
+        "S_06_Mumbra_SYN",
         2237059896,
         11043864738,
-        "S_06_Mumbra_SYN",
-        "S_04_Kalwa",
         3797832335,
         13418006658
       ],
       "planned_arrival_times": [
-        0.0,
-        5.934,
+        480.0,
+        630,
         670,
-        679.648,
-        713.636,
+        698.338,
+        715.7092,
         860,
-        871.574,
-        883.722,
-        887.94,
-        902.024
+        880.522,
+        894.606
       ],
       "actual_arrival_times": [
-        0.0,
-        5.934,
+        480.0,
+        630,
         670,
-        679.648,
-        713.636,
+        698.338,
+        715.7092,
         860,
-        871.574,
-        883.722,
-        887.94,
-        902.024
+        880.522,
+        894.606
       ],
       "charging_stops": [
         {
-          "station_id": "S_02_Majiwada",
-          "plug_type_used": "LEV",
-          "planned_arrival_time": 5.934,
-          "actual_arrival_time": 5.934,
+          "station_id": "S_06_Mumbra_SYN",
+          "plug_type_used": "CCS2",
+          "planned_arrival_time": 698.338,
+          "actual_arrival_time": 698.338,
           "wait_time_minutes": 0.0,
-          "energy_requested_kwh": 0.9693,
-          "planned_charge_start": 5.934
+          "energy_requested_kwh": 3.1956,
+          "planned_charge_start": 698.338
         }
       ]
     },
     {
-      "vehicle_id": "V_4W_001",
+      "vehicle_id": "V_4W_002",
       "stop_sequence": [
         13418006658,
         1643499291,
-        "S_01_Panchpakhadi",
         1647048989,
         13898105689,
         13418006658
       ],
       "planned_arrival_times": [
-        0.0,
+        480.0,
         750,
-        775.338,
-        778.752,
+        776.4,
         830,
         842.118
       ],
       "actual_arrival_times": [
-        0.0,
+        480.0,
         750,
-        775.338,
-        778.752,
+        776.4,
         830,
         842.118
       ],
@@ -86,9 +77,9 @@
     "simulated": false,
     "info": {
       "status": "Time limit reached",
-      "objective_km": 81.737,
-      "runtime_s": 30.213474599993788,
-      "mip_gap": 0.31128728376030745,
+      "objective_km": 76.303,
+      "runtime_s": 300.1264162500156,
+      "mip_gap": 0.0804020759068962,
       "n_vars": 2528,
       "n_constraints": 6266,
       "solver_name": "HiGHS"

@@ -21,7 +21,7 @@ if ROOT not in sys.path:
 
 from solver.instance import make_toy_instance, make_random_instance, load_instance
 from solver.milp import solve_milp
-from solver.heuristic import solve_heuristic
+from solver.heuristic import solve_heuristic, apply_overrides
 from solver.baselines import solve_b1_greedy, solve_b2_capacity_blind, solve_b3_type_blind
 from solver.simulator import simulate_plan
 from solver.objective import calculate_route_cost
@@ -57,18 +57,28 @@ def run_e1_optimality_gap():
                                        {str(c): list(w) for c, w in inst.customer_window.items()},
                                        plan_h.get("unserved_customers", []))["total_score"]
 
-        gap = 100.0 * (cost_h - cost_m) / max(1e-6, cost_m) if cost_m > 0 else 0.0
+        status_m = info_m.get("status", "Unknown")
+        is_optimal = (status_m == "Optimal")
+
+        # Verify solver status == 'Optimal' before computing optimality gap; flag non-optimal instances
+        if is_optimal and cost_m > 0:
+            gap = round(100.0 * (cost_h - cost_m) / max(1e-6, cost_m), 2)
+            gap_display = f"{gap:4.2f}%"
+        else:
+            gap = None
+            gap_display = f"N/A ({status_m})"
 
         rows.append({
             "instance": name,
             "n_customers": len(inst.customers),
+            "milp_status": status_m,
             "milp_cost": round(cost_m, 2),
             "milp_time_sec": round(t_milp, 3),
             "heur_cost": round(cost_h, 2),
             "heur_time_sec": round(t_heur, 3),
-            "optimality_gap_pct": round(gap, 2),
+            "optimality_gap_pct": gap if gap is not None else "",
         })
-        print(f"  {name:15s} | MILP: {cost_m:6.1f} ({t_milp:4.2f}s) | Heur: {cost_h:6.1f} ({t_heur:4.3f}s) | Gap: {gap:4.2f}%")
+        print(f"  {name:15s} | MILP: {cost_m:6.1f} ({t_milp:4.2f}s, {status_m}) | Heur: {cost_h:6.1f} ({t_heur:4.3f}s) | Gap: {gap_display}")
 
     out_csv = os.path.join(RESULTS_DIR, "e1_optimality_gap.csv")
     with open(out_csv, "w", newline="") as f:
@@ -105,9 +115,25 @@ def run_e2_scalability():
 
 def run_e3_price_of_reality():
     print("--- Running E3: Price of Ignoring Reality ---")
-    # Test instances including high-charging contention setups
+    # Benchmark instances including Thane and high-charging-contention setups
+    bench_path = os.path.join(ROOT, "data", "thane_benchmark.json")
+    fleet_path = os.path.join(ROOT, "data", "fleet_config.json")
+    stations_path = os.path.join(ROOT, "data", "stations_config.json")
+    cust8_path = os.path.join(ROOT, "data", "customers_thane_8.json")
+
+    inst_t8 = load_instance(bench_path, fleet_path, stations_path, cust8_path)
+
+    # Thane high-contention scenario: single plug per station
+    contention_overrides = {
+        s["station_id"]: {p: min(1, n) for p, n in s["plugs"].items()}
+        for s in inst_t8.stations
+    }
+    inst_t8_contention = apply_overrides(inst_t8, contention_overrides)
+
     instances = [
         ("toy", make_toy_instance()),
+        ("thane_8", inst_t8),
+        ("thane_8_contention", inst_t8_contention),
     ]
     for seed in (10, 20, 30):
         instances.append((f"bench_rand_s{seed}", make_random_instance(n_customers=10, n_vehicles=4, seed=seed)))
@@ -145,7 +171,7 @@ def run_e3_price_of_reality():
                 "stranded_vehicles": sim_stats["n_stranded_vehicles"],
                 "degradation_ratio": round(degradation_ratio, 2),
             })
-            print(f"  [{inst_name:14s}] {model_name:20s} | Planned: {planned_cost:6.1f} | Sim: {sim_cost:6.1f} | Wait: {sim_stats['total_wait_time_minutes']:5.1f}m | Stranded: {sim_stats['n_stranded_vehicles']}")
+            print(f"  [{inst_name:18s}] {model_name:20s} | Planned: {planned_cost:6.1f} | Sim: {sim_cost:6.1f} | Wait: {sim_stats['total_wait_time_minutes']:5.1f}m | Stranded: {sim_stats['n_stranded_vehicles']}")
 
     out_csv = os.path.join(RESULTS_DIR, "e3_price_of_reality.csv")
     with open(out_csv, "w", newline="") as f:
@@ -161,10 +187,18 @@ def generate_figures(rows: list[dict]):
     print("--- Generating Publication Figures ---")
     df = pd.DataFrame(rows)
 
+    color_map = {
+        "Proposed": "#16a34a",
+        "B1 (Greedy FCFS)": "#2563eb",
+        "B2 (Capacity-Blind)": "#ea580c",
+        "B3 (Type-Blind)": "#dc2626",
+    }
+
     # Figure 1: Wait Time Comparison across Models
     plt.figure(figsize=(7, 4.5))
     df_avg = df.groupby("model")["wait_time_min"].mean().reset_index()
-    plt.bar(df_avg["model"], df_avg["wait_time_min"], color=["#16a34a", "#2563eb", "#ea580c", "#dc2626"])
+    colors1 = [color_map.get(m, "#64748b") for m in df_avg["model"]]
+    plt.bar(df_avg["model"], df_avg["wait_time_min"], color=colors1)
     plt.title("Mean Charging Queue Wait Time (Simulated)")
     plt.ylabel("Wait Time (minutes)")
     plt.grid(axis="y", linestyle="--", alpha=0.7)
@@ -177,7 +211,8 @@ def generate_figures(rows: list[dict]):
     # Figure 2: Time Window Violations
     plt.figure(figsize=(7, 4.5))
     df_tw = df.groupby("model")["tw_violations"].sum().reset_index()
-    plt.bar(df_tw["model"], df_tw["tw_violations"], color=["#16a34a", "#2563eb", "#ea580c", "#dc2626"])
+    colors2 = [color_map.get(m, "#64748b") for m in df_tw["model"]]
+    plt.bar(df_tw["model"], df_tw["tw_violations"], color=colors2)
     plt.title("Total Time-Window Violations under Reality Engine")
     plt.ylabel("Violation Count")
     plt.grid(axis="y", linestyle="--", alpha=0.7)
@@ -190,7 +225,8 @@ def generate_figures(rows: list[dict]):
     # Figure 3: Planned vs Simulated Degradation Ratio
     plt.figure(figsize=(7, 4.5))
     df_deg = df.groupby("model")["degradation_ratio"].mean().reset_index()
-    plt.bar(df_deg["model"], df_deg["degradation_ratio"], color=["#16a34a", "#2563eb", "#ea580c", "#dc2626"])
+    colors3 = [color_map.get(m, "#64748b") for m in df_deg["model"]]
+    plt.bar(df_deg["model"], df_deg["degradation_ratio"], color=colors3)
     plt.axhline(1.0, color="black", linestyle="--", label="Ideal (No degradation)")
     plt.title("Price of Ignoring Reality (Simulated / Planned Cost Ratio)")
     plt.ylabel("Cost Ratio (Simulated / Planned)")

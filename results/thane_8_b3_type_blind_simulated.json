@@ -25,11 +25,11 @@
       "actual_arrival_times": [
         480.0,
         485.554,
-        540,
-        630,
-        670,
+        540.0,
+        630.0,
+        670.0,
         708.488,
-        860,
+        860.0,
         888.446
       ],
       "charging_stops": [
@@ -40,9 +40,13 @@
           "actual_arrival_time": 485.554,
           "wait_time_minutes": 0.0,
           "energy_requested_kwh": 1.6222,
-          "planned_charge_start": 485.554
+          "planned_charge_start": 485.554,
+          "actual_charge_start": 485.554,
+          "actual_charge_end": 515.0485454545454
         }
-      ]
+      ],
+      "stranded": false,
+      "stranding_reason": null
     },
     {
       "vehicle_id": "V_4W_001",
@@ -65,9 +69,9 @@
       "actual_arrival_times": [
         480.0,
         488.644,
-        750,
+        750.0,
         776.4,
-        830,
+        830.0,
         842.118
       ],
       "charging_stops": [
@@ -78,20 +82,27 @@
           "actual_arrival_time": 488.644,
           "wait_time_minutes": 0.0,
           "energy_requested_kwh": 3.39,
-          "planned_charge_start": 488.644
+          "planned_charge_start": 488.644,
+          "actual_charge_start": 488.644,
+          "actual_charge_end": 495.424
         }
-      ]
+      ],
+      "stranded": false,
+      "stranding_reason": null
     }
   ],
   "unserved_customers": [],
   "meta": {
     "customers_file": "data/customers_thane_8.json",
-    "solver": "heuristic",
-    "simulated": false,
-    "info": {
-      "runtime_s": 0.15690410003298894,
-      "n_unserved": 0,
-      "internal_cost": 76.534
+    "solver": "b3_type_blind (simulated)",
+    "simulated": true,
+    "sim_stats": {
+      "total_wait_time_minutes": 0.0,
+      "n_charging_stops": 2,
+      "n_stranded_vehicles": 0,
+      "n_time_window_violations": 0,
+      "total_late_minutes": 0.0,
+      "unserved_customer_count": 0
     },
     "checker_feasible": true
   }

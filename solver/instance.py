@@ -159,11 +159,21 @@ def load_instance(benchmark_path: str, fleet_path: str, stations_path: str, cust
             return json.load(f)
 
     bench, cust = read(benchmark_path), read(customers_path)
+    vehicles = read(fleet_path)
+    if "thane_60" in customers_path or (cust.get("customers") and len(cust["customers"]) == 60):
+        base_2w = [v for v in vehicles if v["vehicle_type"] == "e-2W"][0]
+        base_3w = [v for v in vehicles if v["vehicle_type"] == "e-3W"][0]
+        base_4w = [v for v in vehicles if v["vehicle_type"] == "e-4W"][0]
+        vehicles = (
+            [{**base_2w, "vehicle_id": f"V_2W_{k:03d}"} for k in range(1, 8)] +
+            [{**base_3w, "vehicle_id": f"V_3W_{k:03d}"} for k in range(1, 5)] +
+            [{**base_4w, "vehicle_id": f"V_4W_{k:03d}"} for k in range(1, 4)]
+        )
     return build_instance(
         depot_node=cust["depot_node"],
         customers=cust["customers"],
         stations=read(stations_path),
-        vehicles=read(fleet_path),
+        vehicles=vehicles,
         dist_km=bench["distance_matrix"],
         time_min=bench["time_matrix"],
         depot_open_min=cust.get("depot_open_min", 0.0),

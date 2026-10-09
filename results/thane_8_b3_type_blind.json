@@ -86,12 +86,13 @@
   "unserved_customers": [],
   "meta": {
     "customers_file": "data/customers_thane_8.json",
-    "solver": "heuristic",
+    "solver": "b3_type_blind",
     "simulated": false,
     "info": {
-      "runtime_s": 0.15690410003298894,
+      "runtime_s": 0.15554249996785074,
       "n_unserved": 0,
-      "internal_cost": 76.534
+      "internal_cost": 76.534,
+      "baseline": "B3 (Type-Blind)"
     },
     "checker_feasible": true
   }

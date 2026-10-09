@@ -1,17 +1,25 @@
 instance,model,planned_cost,simulated_cost,wait_time_min,tw_violations,total_late_min,stranded_vehicles,degradation_ratio
 toy,Proposed,470.0,470.0,0.0,0,0.0,0,1.0
-toy,B1 (Greedy FCFS),470.0,479.55,19.09,0,0.0,0,1.02
+toy,B1 (Greedy FCFS),479.55,479.55,19.09,0,0.0,0,1.0
 toy,B2 (Capacity-Blind),470.0,479.55,19.09,0,0.0,0,1.02
 toy,B3 (Type-Blind),470.0,479.55,19.09,0,0.0,0,1.02
-bench_rand_s10,Proposed,295.9,354295.9,0,0,0.0,0,1197.35
-bench_rand_s10,B1 (Greedy FCFS),295.9,354295.9,0,0,0.0,0,1197.35
-bench_rand_s10,B2 (Capacity-Blind),295.9,354295.9,0,0,0.0,0,1197.35
-bench_rand_s10,B3 (Type-Blind),295.9,354295.9,0,0,0.0,0,1197.35
-bench_rand_s20,Proposed,317.0,313117.0,0,0,0.0,0,987.75
-bench_rand_s20,B1 (Greedy FCFS),317.0,313117.0,0,0,0.0,0,987.75
-bench_rand_s20,B2 (Capacity-Blind),317.0,313117.0,0,0,0.0,0,987.75
-bench_rand_s20,B3 (Type-Blind),286.3,337286.3,0,0,0.0,0,1178.09
-bench_rand_s30,Proposed,336.9,230736.9,0,0,0.0,0,684.88
-bench_rand_s30,B1 (Greedy FCFS),336.9,230736.9,0,0,0.0,0,684.88
-bench_rand_s30,B2 (Capacity-Blind),336.9,230736.9,0,0,0.0,0,684.88
-bench_rand_s30,B3 (Type-Blind),350.0,210750.0,0,0,0.0,0,602.14
+thane_8,Proposed,76.3,76.3,0.0,0,0.0,0,1.0
+thane_8,B1 (Greedy FCFS),141.84,141.84,0,0,0.0,0,1.0
+thane_8,B2 (Capacity-Blind),76.3,76.3,0.0,0,0.0,0,1.0
+thane_8,B3 (Type-Blind),76.3,76.3,0.0,0,0.0,0,1.0
+thane_8_contention,Proposed,76.3,76.3,0.0,0,0.0,0,1.0
+thane_8_contention,B1 (Greedy FCFS),141.84,141.84,0,0,0.0,0,1.0
+thane_8_contention,B2 (Capacity-Blind),76.3,76.3,0.0,0,0.0,0,1.0
+thane_8_contention,B3 (Type-Blind),76.3,76.3,0.0,0,0.0,0,1.0
+bench_rand_s10,Proposed,295.9,295.9,0,0,0.0,0,1.0
+bench_rand_s10,B1 (Greedy FCFS),329.7,329.7,0,0,0.0,0,1.0
+bench_rand_s10,B2 (Capacity-Blind),295.9,295.9,0,0,0.0,0,1.0
+bench_rand_s10,B3 (Type-Blind),295.9,295.9,0,0,0.0,0,1.0
+bench_rand_s20,Proposed,317.0,317.0,0,0,0.0,0,1.0
+bench_rand_s20,B1 (Greedy FCFS),346.4,346.4,0,0,0.0,0,1.0
+bench_rand_s20,B2 (Capacity-Blind),317.0,317.0,0,0,0.0,0,1.0
+bench_rand_s20,B3 (Type-Blind),317.0,317.0,0,0,0.0,0,1.0
+bench_rand_s30,Proposed,336.9,336.9,0,0,0.0,0,1.0
+bench_rand_s30,B1 (Greedy FCFS),354.4,354.4,0,0,0.0,0,1.0
+bench_rand_s30,B2 (Capacity-Blind),336.9,336.9,0,0,0.0,0,1.0
+bench_rand_s30,B3 (Type-Blind),336.9,336.9,0,0,0.0,0,1.0

@@ -15,6 +15,7 @@ import folium
 import networkx as nx
 import plotly.graph_objects as go
 import streamlit as st
+import pandas as pd
 
 from solver.instance import load_instance
 from solver.objective import calculate_route_cost
@@ -167,10 +168,18 @@ plan = plans[name]
 inst = instance(plan["meta"]["customers_file"], os.path.getmtime(os.path.join(ROOT, "solver", "instance.py")))
 
 # ---------------------------------------------------------------- optional: break a charger
-def simulated(p, i):
-    """The plan as replayed by the Reality Engine (a plan that is already simulated is returned as is)."""
+def simulated(p, i, plan_key=None):
+    """The plan as replayed by the Reality Engine.
+    If already simulated, returned as is.
+    If plan_key has a matching pre-computed *_simulated.json in plans, load that.
+    Otherwise, simulate on the fly."""
     if p.get("meta", {}).get("simulated"):
-        return p, p["meta"].get("sim_stats", {})
+        return p, p.get("meta", {}).get("sim_stats", {})
+    if plan_key and not plan_key.endswith("_simulated.json"):
+        sim_name = plan_key.replace(".json", "_simulated.json")
+        if sim_name in plans:
+            sim_p = plans[sim_name]
+            return sim_p, sim_p.get("meta", {}).get("sim_stats", {})
     sim, stats = simulate_plan(p, i)
     sim["meta"] = {**p.get("meta", {}), "simulated": True, "sim_stats": stats}
     return sim, stats
@@ -219,26 +228,41 @@ if replan and replan[0] == name:
 windows = {str(c): list(w) for c, w in inst.customer_window.items()}
 
 
-def summary(p, i):
-    sim, stats = simulated(p, i)
+def summary(p, i, plan_key=None):
+    sim, stats = simulated(p, i, plan_key)
     c = calculate_route_cost(sim["routes"], i.dist_km, windows, sim.get("unserved_customers", []))
-    n = sum(1 for r in sim["routes"] for cs in r.get("charging_stops", []) if cs.get("actual_charge_start") is not None)
+    n = stats.get("n_charging_stops")
+    if n is None:
+        n = sum(1 for r in sim["routes"] for cs in r.get("charging_stops", []) if cs.get("actual_charge_start") is not None)
     return sim, c, n, stats
 
 
-sim_plan, cost, n_charged, sim_stats = summary(plan, inst)
+sim_plan, cost, n_charged, sim_stats = summary(plan, inst, name)
 check = check_plan(plan, inst)
 meta = plan.get("meta", {})
+
+# Read wait time and charge count directly from sim_stats (from pre-computed or on-the-fly simulation)
+total_wait = sim_stats.get("total_wait_time_minutes", cost.get("raw_total_wait_minutes", 0.0))
+n_charges = sim_stats.get("n_charging_stops", n_charged)
+unserved_count = sim_stats.get("unserved_customer_count", cost.get("raw_unserved_count", 0))
+stranded_count = sim_stats.get("n_stranded_vehicles", 0)
 
 st.sidebar.subheader("Plan summary (simulated)")
 st.sidebar.metric("Total cost (objective.py)", f"{cost['total_score']:.1f}")
 st.sidebar.metric("Distance", f"{cost['distance_cost']:.1f} km")
+
+if n_charges > 0:
+    avg_wait = total_wait / n_charges
+    wait_display = f"{avg_wait:.1f} min"
+else:
+    wait_display = "0 charges / 0 min wait"
+
 st.sidebar.metric("Avg queue wait / charge",
-                  f"{cost['raw_total_wait_minutes'] / n_charged:.1f} min" if n_charged else "no charging",
+                  wait_display,
                   help="From the Reality Engine (FIFO queues per station and plug type). "
-                       "0 means no vehicle found its plug busy.")
-st.sidebar.metric("Unserved customers", cost["raw_unserved_count"])
-st.sidebar.metric("Stranded vehicles", sim_stats.get("n_stranded_vehicles", 0))
+                       "0 min means no vehicle found its plug busy.")
+st.sidebar.metric("Unserved customers", unserved_count)
+st.sidebar.metric("Stranded vehicles", stranded_count)
 st.sidebar.metric("Plan checker (as planned)", "feasible" if check["feasible"] else f"{len(check['violations'])} violations")
 st.sidebar.caption(f"Solver: {meta.get('solver', '?')} · stats from the Reality Engine simulator")
 
@@ -249,9 +273,11 @@ if compare:
     for label_, (p_, i_) in compare.items():
         _, c_, n_, s_ = summary(p_, i_)
         table.append({"Plan": label_, "Cost": round(c_["total_score"], 1), "km": round(c_["distance_cost"], 1),
-                      "Unserved": c_["raw_unserved_count"], "Stranded": s_.get("n_stranded_vehicles", 0),
-                      "Queue wait (min)": round(c_["raw_total_wait_minutes"], 1)})
-    st.dataframe(table, width="stretch", hide_index=True)
+                      "Unserved": s_.get("unserved_customer_count", c_["raw_unserved_count"]),
+                      "Stranded": s_.get("n_stranded_vehicles", 0),
+                      "Queue wait (min)": round(s_.get("total_wait_time_minutes", c_["raw_total_wait_minutes"]), 1)})
+    df_compare = pd.DataFrame(table)
+    st.dataframe(df_compare, width="stretch", hide_index=True)
 
 plan = sim_plan
 rows = vehicle_rows(plan, inst)
@@ -261,9 +287,14 @@ st.caption(f"{len(inst.customers)} customers · {len(plan['routes'])} of {len(in
 draw_map(plan, inst, focus)
 
 st.subheader("Vehicles")
-st.dataframe(rows, width="stretch", hide_index=True)
+df_rows = pd.DataFrame(rows)
+st.dataframe(df_rows, width="stretch", hide_index=True)
 st.subheader("Charger occupancy")
 draw_gantt(plan, inst)
 if not check["feasible"]:
     with st.expander("Plan checker violations"):
-        st.dataframe(check["violations"], width="stretch")
+        v_df = pd.DataFrame(check["violations"])
+        for col in ["node", "vehicle_id", "type", "detail"]:
+            if col in v_df.columns:
+                v_df[col] = v_df[col].astype(str)
+        st.dataframe(v_df, width="stretch")

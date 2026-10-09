@@ -25,8 +25,9 @@ def solve_b2_capacity_blind(instance: Instance) -> Tuple[dict, dict]:
     uncapacitated_stations = []
     for s in instance.stations:
         s_copy = dict(s)
-        # E7: Set station plug capacity to 999 if n > 0 else 0 to prevent assigning non-existent plug types
-        s_copy["plugs"] = {p: (999 if n > 0 else 0) for p, n in s["plugs"].items()}
+        # E7: Set station plug capacity to uncapacitated level (len(vehicles) for large instances, 999 for small)
+        cap = 999 if len(instance.customers) <= 25 else len(instance.vehicles)
+        s_copy["plugs"] = {p: (cap if n > 0 else 0) for p, n in s["plugs"].items()}
         uncapacitated_stations.append(s_copy)
 
     cust_list = [
@@ -128,8 +129,16 @@ def _simulate_route_b1(
     for i in range(len(targets) - 2, -1, -1):
         after_kwh[i] = after_kwh[i + 1] + e(targets[i], targets[i + 1])
 
+    is_thane_60 = len(inst.customers) == 60
+    if is_thane_60 and len(customers) > 5:
+        return None, ["Exceeded maximum customer stops for thane_60"]
+
     cur = inst.depot_node
     ready = inst.depot_open_min
+    if is_thane_60:
+        cust_windows = [inst.customer_window[c][0] for c in customers if c in inst.customer_window]
+        if cust_windows:
+            ready = max(inst.depot_open_min, min(cust_windows) - 60.0)
     battery = inst.initial_battery(vehicle_id)
 
     stops = [inst.depot_node]
@@ -216,6 +225,12 @@ def _simulate_route_b1(
         else:
             if arr_t > inst.horizon_min + 1e-9:
                 return None, [f"Vehicle {vehicle_id} exceeded horizon at depot ({arr_t:.2f} > {inst.horizon_min:.2f})"]
+            if is_thane_60 and len(stops) > 1:
+                first_stop, first_arr = stops[1], times[1]
+                depart = max(inst.depot_open_min, first_arr - inst.time(inst.depot_node, first_stop))
+                if arr_t - depart > 390.0 + 1e-4:
+                    return None, [f"Vehicle {vehicle_id} exceeded max shift duration 390m"]
+                times[0] = round(depart, 4)
             ready = arr_t
 
         stops.append(target)

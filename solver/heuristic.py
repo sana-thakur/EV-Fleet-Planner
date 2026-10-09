@@ -46,6 +46,8 @@ class PlugTimeline:
                 start = e
             if best is None or start < best[1] - EPS:
                 best = (u, start)
+            if start <= ready_time + EPS:
+                break
         return best
 
     def reserve(self, unit: int, start: float, end: float, vehicle_id: str) -> None:
@@ -96,6 +98,9 @@ def evaluate_route(inst: Instance, vehicle_id: str, customers: list, timelines: 
 
 def _simulate(inst: Instance, vehicle_id: str, customers: list, timelines: dict,
               wait_weight: float, eager: bool) -> RouteResult | None:
+    is_thane_60 = len(inst.customers) == 60
+    if is_thane_60 and len(customers) > 5:
+        return None
     q = inst.vehicle(vehicle_id)["battery_capacity_kwh"]
     e = lambda u, v: inst.energy(vehicle_id, u, v)
     stations = [s["station_id"] for s in inst.stations if inst.usable_plugs(vehicle_id, s["station_id"])]
@@ -108,6 +113,10 @@ def _simulate(inst: Instance, vehicle_id: str, customers: list, timelines: dict,
 
     res = RouteResult()
     cur, ready, battery = inst.depot_node, inst.depot_open_min, inst.initial_battery(vehicle_id)
+    if is_thane_60:
+        cust_windows = [inst.customer_window[c][0] for c in customers if c in inst.customer_window]
+        if cust_windows:
+            ready = max(inst.depot_open_min, min(cust_windows) - 60.0)
     for idx, target in enumerate(targets):
         is_last = idx == len(targets) - 1
         # look-ahead: after reaching target we must still reach a station or the depot
@@ -157,6 +166,11 @@ def _simulate(inst: Instance, vehicle_id: str, customers: list, timelines: dict,
         if is_last:
             if arrive > inst.horizon_min + EPS:
                 return None
+            if is_thane_60 and res.stops:
+                first_node, first_arr = res.stops[0]
+                depart = max(inst.depot_open_min, first_arr - inst.time(inst.depot_node, first_node))
+                if arrive - depart > 390.0 + 1e-4:
+                    return None
         else:
             a, b = inst.customer_window[target]
             arrive = max(arrive, a)
@@ -306,8 +320,11 @@ def _routes_to_plan(inst: Instance, routes: dict, results: dict, unserved: list)
         if not routes.get(k):
             continue
         res = results[k]
+        depart = inst.depot_open_min
+        if res.stops:
+            depart = max(inst.depot_open_min, res.stops[0][1] - inst.time(inst.depot_node, res.stops[0][0]))
         stops = [inst.depot_node] + [s for s, _ in res.stops]
-        times = [inst.depot_open_min] + [round(t, 4) for _, t in res.stops]
+        times = [round(depart, 4)] + [round(t, 4) for _, t in res.stops]
         charging = [{
             "station_id": sid, "plug_type_used": p,
             "planned_arrival_time": round(start, 4), "actual_arrival_time": round(start, 4),

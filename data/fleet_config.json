@@ -1,12 +1,12 @@
 [
-  {"vehicle_id": "V_2W_001", "vehicle_type": "e-2W", "battery_capacity_kwh": 3.4, "energy_consumption_per_km": 0.034, "compatible_plugs": ["LEV"], "initial_soc": 0.25},
-  {"vehicle_id": "V_2W_002", "vehicle_type": "e-2W", "battery_capacity_kwh": 3.4, "energy_consumption_per_km": 0.034, "compatible_plugs": ["LEV"], "initial_soc": 0.25},
-  {"vehicle_id": "V_2W_003", "vehicle_type": "e-2W", "battery_capacity_kwh": 3.4, "energy_consumption_per_km": 0.034, "compatible_plugs": ["LEV"], "initial_soc": 0.25},
-  {"vehicle_id": "V_2W_004", "vehicle_type": "e-2W", "battery_capacity_kwh": 3.4, "energy_consumption_per_km": 0.034, "compatible_plugs": ["LEV"], "initial_soc": 0.25},
-  {"vehicle_id": "V_2W_005", "vehicle_type": "e-2W", "battery_capacity_kwh": 3.4, "energy_consumption_per_km": 0.034, "compatible_plugs": ["LEV"], "initial_soc": 0.25},
-  {"vehicle_id": "V_3W_001", "vehicle_type": "e-3W", "battery_capacity_kwh": 7.37, "energy_consumption_per_km": 0.074, "compatible_plugs": ["LEV", "Type2"], "initial_soc": 0.25},
-  {"vehicle_id": "V_3W_002", "vehicle_type": "e-3W", "battery_capacity_kwh": 7.37, "energy_consumption_per_km": 0.074, "compatible_plugs": ["LEV", "Type2"], "initial_soc": 0.25},
-  {"vehicle_id": "V_3W_003", "vehicle_type": "e-3W", "battery_capacity_kwh": 7.37, "energy_consumption_per_km": 0.074, "compatible_plugs": ["LEV", "Type2"], "initial_soc": 0.25},
-  {"vehicle_id": "V_4W_001", "vehicle_type": "e-4W", "battery_capacity_kwh": 21.3, "energy_consumption_per_km": 0.173, "compatible_plugs": ["CCS2", "Type2"], "initial_soc": 0.25},
-  {"vehicle_id": "V_4W_002", "vehicle_type": "e-4W", "battery_capacity_kwh": 21.3, "energy_consumption_per_km": 0.173, "compatible_plugs": ["CCS2", "Type2"], "initial_soc": 0.25}
+  {"vehicle_id": "V_2W_001", "vehicle_type": "e-2W", "battery_capacity_kwh": 3.0, "energy_consumption_per_km": 0.040, "compatible_plugs": ["LEV"], "initial_soc": 0.15},
+  {"vehicle_id": "V_2W_002", "vehicle_type": "e-2W", "battery_capacity_kwh": 3.0, "energy_consumption_per_km": 0.040, "compatible_plugs": ["LEV"], "initial_soc": 0.15},
+  {"vehicle_id": "V_2W_003", "vehicle_type": "e-2W", "battery_capacity_kwh": 3.0, "energy_consumption_per_km": 0.040, "compatible_plugs": ["LEV"], "initial_soc": 0.15},
+  {"vehicle_id": "V_2W_004", "vehicle_type": "e-2W", "battery_capacity_kwh": 3.0, "energy_consumption_per_km": 0.040, "compatible_plugs": ["LEV"], "initial_soc": 0.15},
+  {"vehicle_id": "V_2W_005", "vehicle_type": "e-2W", "battery_capacity_kwh": 3.0, "energy_consumption_per_km": 0.040, "compatible_plugs": ["LEV"], "initial_soc": 0.15},
+  {"vehicle_id": "V_3W_001", "vehicle_type": "e-3W", "battery_capacity_kwh": 6.0, "energy_consumption_per_km": 0.080, "compatible_plugs": ["LEV", "Type2"], "initial_soc": 0.15},
+  {"vehicle_id": "V_3W_002", "vehicle_type": "e-3W", "battery_capacity_kwh": 6.0, "energy_consumption_per_km": 0.080, "compatible_plugs": ["LEV", "Type2"], "initial_soc": 0.15},
+  {"vehicle_id": "V_3W_003", "vehicle_type": "e-3W", "battery_capacity_kwh": 6.0, "energy_consumption_per_km": 0.080, "compatible_plugs": ["LEV", "Type2"], "initial_soc": 0.15},
+  {"vehicle_id": "V_4W_001", "vehicle_type": "e-4W", "battery_capacity_kwh": 15.0, "energy_consumption_per_km": 0.200, "compatible_plugs": ["CCS2", "Type2"], "initial_soc": 0.15},
+  {"vehicle_id": "V_4W_002", "vehicle_type": "e-4W", "battery_capacity_kwh": 15.0, "energy_consumption_per_km": 0.200, "compatible_plugs": ["CCS2", "Type2"], "initial_soc": 0.15}
 ]

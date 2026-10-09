@@ -76,7 +76,7 @@
     "solver": "heuristic",
     "simulated": false,
     "info": {
-      "runtime_s": 0.08262395800556988,
+      "runtime_s": 0.08242887503001839,
       "n_unserved": 0,
       "internal_cost": 76.30300000000001
     },

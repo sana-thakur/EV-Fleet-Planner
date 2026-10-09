@@ -20,13 +20,17 @@ from solver.instance import load_instance
 from solver.milp import solve_milp
 from solver.plan_checker import check_plan
 from solver.simulator import simulate_plan
+from solver.baselines import solve_b1_greedy, solve_b2_capacity_blind, solve_b3_type_blind
+
+BASELINES = {"b1_greedy": solve_b1_greedy, "b2_capacity_blind": solve_b2_capacity_blind,
+             "b3_type_blind": solve_b3_type_blind}
 
 RUNS = [
     (8, "heuristic"),
     (8, "milp"),
     (25, "heuristic"),
     (60, "heuristic"),
-]
+] + [(n, b) for n in (25, 60) for b in BASELINES]  # baselines: what ignoring reality costs
 MILP_TIME_LIMIT_S = 300  # 30 s left non-optimal routes with pointless station detours
 
 
@@ -45,6 +49,8 @@ def main():
 
         if solver == "milp":
             plan, info = solve_milp(inst, time_limit_s=MILP_TIME_LIMIT_S)
+        elif solver in BASELINES:
+            plan, info = BASELINES[solver](inst)
         else:
             plan, info = solve_heuristic(inst)
 

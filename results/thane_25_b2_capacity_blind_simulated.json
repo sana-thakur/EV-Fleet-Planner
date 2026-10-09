@@ -26,16 +26,18 @@
       ],
       "actual_arrival_times": [
         480.0,
-        590,
+        590.0,
         598.872,
-        870,
+        870.0,
         882.9,
         895.208,
         901.596,
         908.266,
         916.866
       ],
-      "charging_stops": []
+      "charging_stops": [],
+      "stranded": false,
+      "stranding_reason": null
     },
     {
       "vehicle_id": "V_2W_002",
@@ -68,12 +70,12 @@
       "actual_arrival_times": [
         480.0,
         485.554,
-        540,
+        540.0,
         565.212,
         573.746,
-        750,
+        750.0,
         759.524,
-        840,
+        840.0,
         846.41,
         872.412,
         879.808
@@ -86,9 +88,13 @@
           "actual_arrival_time": 485.554,
           "wait_time_minutes": 0.0,
           "energy_requested_kwh": 0.5026,
-          "planned_charge_start": 485.554
+          "planned_charge_start": 485.554,
+          "actual_charge_start": 485.554,
+          "actual_charge_end": 494.6921818181818
         }
-      ]
+      ],
+      "stranded": false,
+      "stranding_reason": null
     },
     {
       "vehicle_id": "V_4W_001",
@@ -125,8 +131,8 @@
       "actual_arrival_times": [
         480.0,
         488.644,
-        570,
-        790,
+        570.0,
+        790.0,
         806.024,
         822.888,
         857.316,
@@ -135,7 +141,7 @@
         908.71,
         918.572,
         925.65,
-        932.998
+        932.9979999999999
       ],
       "charging_stops": [
         {
@@ -145,20 +151,27 @@
           "actual_arrival_time": 488.644,
           "wait_time_minutes": 0.0,
           "energy_requested_kwh": 6.8812,
-          "planned_charge_start": 488.644
+          "planned_charge_start": 488.644,
+          "actual_charge_start": 488.644,
+          "actual_charge_end": 502.4064
         }
-      ]
+      ],
+      "stranded": false,
+      "stranding_reason": null
     }
   ],
   "unserved_customers": [],
   "meta": {
     "customers_file": "data/customers_thane_25.json",
-    "solver": "heuristic",
-    "simulated": false,
-    "info": {
-      "runtime_s": 3.0749214579118416,
-      "n_unserved": 0,
-      "internal_cost": 123.592
+    "solver": "b2_capacity_blind (simulated)",
+    "simulated": true,
+    "sim_stats": {
+      "total_wait_time_minutes": 0.0,
+      "n_charging_stops": 2,
+      "n_stranded_vehicles": 0,
+      "n_time_window_violations": 0,
+      "total_late_minutes": 0.0,
+      "unserved_customer_count": 0
     },
     "checker_feasible": true
   }

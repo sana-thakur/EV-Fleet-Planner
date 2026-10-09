@@ -1,0 +1,529 @@
+{
+  "routes": [
+    {
+      "vehicle_id": "V_2W_001",
+      "stop_sequence": [
+        13418006658,
+        2493905821,
+        2237026764,
+        14109938295,
+        13584404953,
+        13580388018,
+        12350547273,
+        11022637330,
+        5861033680,
+        "S_01_Panchpakhadi",
+        2227589015,
+        7374121658,
+        13418006658
+      ],
+      "planned_arrival_times": [
+        480.0,
+        540,
+        549.914,
+        555.996,
+        571.228,
+        582.104,
+        587.558,
+        593.498,
+        605.302,
+        612.312,
+        631.51,
+        647.228,
+        660.406
+      ],
+      "actual_arrival_times": [
+        480.0,
+        540.0,
+        549.914,
+        555.996,
+        571.228,
+        582.104,
+        587.558,
+        593.498,
+        605.302,
+        612.312,
+        631.51,
+        647.228,
+        660.406
+      ],
+      "charging_stops": [
+        {
+          "station_id": "S_01_Panchpakhadi",
+          "plug_type_used": "LEV",
+          "planned_arrival_time": 612.312,
+          "actual_arrival_time": 612.312,
+          "wait_time_minutes": 0.0,
+          "energy_requested_kwh": 0.3212,
+          "planned_charge_start": 612.312,
+          "actual_charge_start": 612.312,
+          "actual_charge_end": 618.152
+        }
+      ],
+      "stranded": false,
+      "stranding_reason": null
+    },
+    {
+      "vehicle_id": "V_2W_002",
+      "stop_sequence": [
+        13418006658,
+        11021415660,
+        "S_04_Kalwa",
+        13713661702,
+        13262290338,
+        13418006658
+      ],
+      "planned_arrival_times": [
+        480.0,
+        540,
+        549.72,
+        584.9202,
+        624.0002,
+        633.9102
+      ],
+      "actual_arrival_times": [
+        480.0,
+        540.0,
+        549.72,
+        584.9202,
+        624.0002000000001,
+        633.9102
+      ],
+      "charging_stops": [
+        {
+          "station_id": "S_04_Kalwa",
+          "plug_type_used": "LEV",
+          "planned_arrival_time": 549.72,
+          "actual_arrival_time": 549.72,
+          "wait_time_minutes": 0.0,
+          "energy_requested_kwh": 0.4795,
+          "planned_charge_start": 549.72,
+          "actual_charge_start": 549.72,
+          "actual_charge_end": 558.4381818181819
+        }
+      ],
+      "stranded": false,
+      "stranding_reason": null
+    },
+    {
+      "vehicle_id": "V_2W_003",
+      "stop_sequence": [
+        13418006658,
+        13734516300,
+        2224874021,
+        13851579986,
+        13820156712,
+        "S_02_Majiwada",
+        1647048989,
+        4367564023,
+        2228429202,
+        13418006658
+      ],
+      "planned_arrival_times": [
+        480.0,
+        540,
+        562.112,
+        581.654,
+        590.562,
+        601.7,
+        660,
+        690,
+        820,
+        829.868
+      ],
+      "actual_arrival_times": [
+        480.0,
+        540.0,
+        562.112,
+        581.654,
+        590.562,
+        601.7,
+        660.0,
+        690.0,
+        820.0,
+        829.868
+      ],
+      "charging_stops": [
+        {
+          "station_id": "S_02_Majiwada",
+          "plug_type_used": "LEV",
+          "planned_arrival_time": 601.7,
+          "actual_arrival_time": 601.7,
+          "wait_time_minutes": 0.0,
+          "energy_requested_kwh": 0.2605,
+          "planned_charge_start": 601.7,
+          "actual_charge_start": 601.7,
+          "actual_charge_end": 606.4363636363637
+        }
+      ],
+      "stranded": false,
+      "stranding_reason": null
+    },
+    {
+      "vehicle_id": "V_2W_004",
+      "stop_sequence": [
+        13418006658,
+        "S_01_Panchpakhadi",
+        7346048009,
+        7350288014,
+        5428927766,
+        2440292896,
+        13418006658
+      ],
+      "planned_arrival_times": [
+        480.0,
+        483.578,
+        663.744,
+        680,
+        693.398,
+        700.568,
+        732.224
+      ],
+      "actual_arrival_times": [
+        480.0,
+        483.578,
+        663.744,
+        680.0,
+        693.398,
+        700.568,
+        732.2239999999999
+      ],
+      "charging_stops": [
+        {
+          "station_id": "S_01_Panchpakhadi",
+          "plug_type_used": "LEV",
+          "planned_arrival_time": 483.578,
+          "actual_arrival_time": 483.578,
+          "wait_time_minutes": 0.0,
+          "energy_requested_kwh": 0.5412,
+          "planned_charge_start": 618.152,
+          "actual_charge_start": 483.578,
+          "actual_charge_end": 493.41799999999995
+        }
+      ],
+      "stranded": false,
+      "stranding_reason": null
+    },
+    {
+      "vehicle_id": "V_2W_005",
+      "stop_sequence": [
+        13418006658,
+        "S_01_Panchpakhadi",
+        11809199042,
+        7339772222,
+        8848434533,
+        11043911714,
+        5806314880,
+        11043864738,
+        13418006658
+      ],
+      "planned_arrival_times": [
+        480.0,
+        483.578,
+        673.8295,
+        685.9675,
+        693.8535,
+        703.3775,
+        709.6455,
+        930,
+        958.446
+      ],
+      "actual_arrival_times": [
+        480.0,
+        483.578,
+        673.8295,
+        685.9675000000001,
+        693.8535,
+        703.3775,
+        709.6455000000001,
+        930.0,
+        958.446
+      ],
+      "charging_stops": [
+        {
+          "station_id": "S_01_Panchpakhadi",
+          "plug_type_used": "LEV",
+          "planned_arrival_time": 483.578,
+          "actual_arrival_time": 483.578,
+          "wait_time_minutes": 9.839999999999975,
+          "energy_requested_kwh": 0.5701,
+          "planned_charge_start": 627.992,
+          "actual_charge_start": 493.41799999999995,
+          "actual_charge_end": 503.7834545454545
+        }
+      ],
+      "stranded": false,
+      "stranding_reason": null
+    },
+    {
+      "vehicle_id": "V_3W_001",
+      "stop_sequence": [
+        13418006658,
+        630707052,
+        7312496725,
+        2237059896,
+        "S_06_Mumbra_SYN",
+        2242267467,
+        13418006658
+      ],
+      "planned_arrival_times": [
+        480.0,
+        820,
+        950,
+        956.218,
+        972.13,
+        988.4381,
+        1000.6441
+      ],
+      "actual_arrival_times": [
+        480.0,
+        820.0,
+        950.0,
+        956.218,
+        972.13,
+        988.4381,
+        1000.6441
+      ],
+      "charging_stops": [
+        {
+          "station_id": "S_06_Mumbra_SYN",
+          "plug_type_used": "Type2",
+          "planned_arrival_time": 972.13,
+          "actual_arrival_time": 972.13,
+          "wait_time_minutes": 0.0,
+          "energy_requested_kwh": 0.6923,
+          "planned_charge_start": 972.13,
+          "actual_charge_start": 972.13,
+          "actual_charge_end": 974.0180909090909
+        }
+      ],
+      "stranded": false,
+      "stranding_reason": null
+    },
+    {
+      "vehicle_id": "V_3W_002",
+      "stop_sequence": [
+        13418006658,
+        1960734545,
+        7345713602,
+        8616914353,
+        7346490331,
+        "S_05_Kasarvadavali",
+        1643499291,
+        13801048474,
+        2227611871,
+        5865499856,
+        2230389553,
+        2228293145,
+        13418006658
+      ],
+      "planned_arrival_times": [
+        480.0,
+        540,
+        561.834,
+        572.522,
+        583.184,
+        593.086,
+        900,
+        920,
+        931.29,
+        940.368,
+        956.688,
+        968.86,
+        981.436
+      ],
+      "actual_arrival_times": [
+        480.0,
+        540.0,
+        561.834,
+        572.522,
+        583.1840000000001,
+        593.0860000000001,
+        900.0,
+        920.0,
+        931.29,
+        940.368,
+        956.6880000000001,
+        968.8600000000001,
+        981.4360000000001
+      ],
+      "charging_stops": [
+        {
+          "station_id": "S_05_Kasarvadavali",
+          "plug_type_used": "LEV",
+          "planned_arrival_time": 593.086,
+          "actual_arrival_time": 593.0860000000001,
+          "wait_time_minutes": 0.0,
+          "energy_requested_kwh": 1.3864,
+          "planned_charge_start": 593.086,
+          "actual_charge_start": 593.0860000000001,
+          "actual_charge_end": 618.2932727272729
+        }
+      ],
+      "stranded": false,
+      "stranding_reason": null
+    },
+    {
+      "vehicle_id": "V_3W_003",
+      "stop_sequence": [
+        13418006658,
+        1643401380,
+        13537098458,
+        13537098435,
+        11350820154,
+        "S_04_Kalwa",
+        4140645381,
+        2242266833,
+        2242267376,
+        13418006658
+      ],
+      "planned_arrival_times": [
+        480.0,
+        540,
+        550.772,
+        556.5,
+        569.75,
+        587.946,
+        601.2735,
+        608.0655,
+        627.4055,
+        638.9595
+      ],
+      "actual_arrival_times": [
+        480.0,
+        540.0,
+        550.772,
+        556.5,
+        569.75,
+        587.946,
+        601.2735,
+        608.0655,
+        627.4055000000001,
+        638.9595
+      ],
+      "charging_stops": [
+        {
+          "station_id": "S_04_Kalwa",
+          "plug_type_used": "Type2",
+          "planned_arrival_time": 587.946,
+          "actual_arrival_time": 587.946,
+          "wait_time_minutes": 0.0,
+          "energy_requested_kwh": 1.2626,
+          "planned_charge_start": 587.946,
+          "actual_charge_start": 587.946,
+          "actual_charge_end": 591.3894545454546
+        }
+      ],
+      "stranded": false,
+      "stranding_reason": null
+    },
+    {
+      "vehicle_id": "V_4W_001",
+      "stop_sequence": [
+        13418006658,
+        "S_01_Panchpakhadi",
+        13569691978,
+        7353288379,
+        13418006658
+      ],
+      "planned_arrival_times": [
+        480.0,
+        483.578,
+        540,
+        560.584,
+        593.598
+      ],
+      "actual_arrival_times": [
+        480.0,
+        483.578,
+        540.0,
+        560.584,
+        593.598
+      ],
+      "charging_stops": [
+        {
+          "station_id": "S_01_Panchpakhadi",
+          "plug_type_used": "CCS2",
+          "planned_arrival_time": 483.578,
+          "actual_arrival_time": 483.578,
+          "wait_time_minutes": 0.0,
+          "energy_requested_kwh": 2.4365,
+          "planned_charge_start": 483.578,
+          "actual_charge_start": 483.578,
+          "actual_charge_end": 488.45099999999996
+        }
+      ],
+      "stranded": false,
+      "stranding_reason": null
+    },
+    {
+      "vehicle_id": "V_4W_002",
+      "stop_sequence": [
+        13418006658,
+        3797743022,
+        4233657036,
+        4233657041,
+        3797743406,
+        7353309397,
+        5428724533,
+        7353309385,
+        "S_02_Majiwada",
+        13418006658
+      ],
+      "planned_arrival_times": [
+        480.0,
+        540,
+        547.912,
+        600,
+        606.264,
+        613.31,
+        930,
+        942.342,
+        966.014,
+        972.7516
+      ],
+      "actual_arrival_times": [
+        480.0,
+        540.0,
+        547.912,
+        600.0,
+        606.264,
+        613.3100000000001,
+        930.0,
+        942.342,
+        966.014,
+        972.7516
+      ],
+      "charging_stops": [
+        {
+          "station_id": "S_02_Majiwada",
+          "plug_type_used": "CCS2",
+          "planned_arrival_time": 966.014,
+          "actual_arrival_time": 966.014,
+          "wait_time_minutes": 0.0,
+          "energy_requested_kwh": 0.4918,
+          "planned_charge_start": 966.014,
+          "actual_charge_start": 966.014,
+          "actual_charge_end": 966.9976
+        }
+      ],
+      "stranded": false,
+      "stranding_reason": null
+    }
+  ],
+  "unserved_customers": [],
+  "meta": {
+    "customers_file": "data/customers_thane_60.json",
+    "solver": "b1_greedy (simulated)",
+    "simulated": true,
+    "sim_stats": {
+      "total_wait_time_minutes": 9.84,
+      "n_charging_stops": 10,
+      "n_stranded_vehicles": 0,
+      "n_time_window_violations": 0,
+      "total_late_minutes": 0.0,
+      "unserved_customer_count": 0
+    },
+    "checker_feasible": true
+  }
+}

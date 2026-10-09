@@ -19,6 +19,7 @@ import streamlit as st
 from solver.instance import load_instance
 from solver.objective import calculate_route_cost
 from solver.plan_checker import check_plan
+from solver.simulator import simulate_plan
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 BENCHMARK = os.path.join(ROOT, "data", "thane_benchmark.json")
@@ -40,7 +41,9 @@ def road_graph():
 
 
 @st.cache_resource
-def instance(customers_file):
+def instance(customers_file, code_version):
+    """code_version is part of the cache key: editing solver/instance.py invalidates cached Instances
+    (otherwise a running app keeps objects built by the old class)."""
     return load_instance(BENCHMARK, os.path.join(ROOT, "data", "fleet_config.json"),
                          os.path.join(ROOT, "data", "stations_config.json"), os.path.join(ROOT, customers_file))
 
@@ -67,6 +70,8 @@ def charging_intervals(plan, inst):
         for cs in r.get("charging_stops", []):
             if cs.get("actual_charge_start") is not None and cs.get("actual_charge_end") is not None:
                 start, end = cs["actual_charge_start"], cs["actual_charge_end"]
+            elif plan.get("meta", {}).get("simulated"):
+                continue  # simulated, but this charge never happened (vehicle stranded / plug rejected)
             else:
                 start = cs.get("planned_charge_start", cs["planned_arrival_time"])
                 end = start + inst.charge_minutes(cs["station_id"], cs["plug_type_used"], cs["energy_requested_kwh"])
@@ -88,6 +93,7 @@ def vehicle_rows(plan, inst):
             "Time (min)": round(times[-1] - depart, 1),
             "Charges": len(r.get("charging_stops", [])),
             "Queue wait (min)": round(sum(cs.get("wait_time_minutes", 0.0) for cs in r.get("charging_stops", [])), 1),
+            "Stranded": r.get("stranding_reason") or "",
         })
     return rows
 
@@ -155,45 +161,99 @@ if not plans:
                "(or python experiments/solve_thane.py for the demo plans).")
     st.stop()
 
-name = st.sidebar.selectbox("Route plan", list(plans))
+names = list(plans)
+name = st.sidebar.selectbox("Route plan", names, index=next((i for i, n in enumerate(names) if "heuristic" in n), 0))
 plan = plans[name]
-inst = instance(plan["meta"]["customers_file"])
+inst = instance(plan["meta"]["customers_file"], os.path.getmtime(os.path.join(ROOT, "solver", "instance.py")))
 
 # ---------------------------------------------------------------- optional: break a charger
+def simulated(p, i):
+    """The plan as replayed by the Reality Engine (a plan that is already simulated is returned as is)."""
+    if p.get("meta", {}).get("simulated"):
+        return p, p["meta"].get("sim_stats", {})
+    sim, stats = simulate_plan(p, i)
+    sim["meta"] = {**p.get("meta", {}), "simulated": True, "sim_stats": stats}
+    return sim, stats
+
+
+uses = {}  # (station, plug) -> vehicles that charge there in the loaded plan
+for r in plan["routes"]:
+    for cs in r.get("charging_stops", []):
+        uses.setdefault((cs["station_id"], cs["plug_type_used"]), []).append(r["vehicle_id"])
+
 with st.sidebar.expander("Break a charger (re-plan)"):
-    sid = st.selectbox("Station", [s["station_id"] for s in inst.stations])
-    plug = st.selectbox("Plug type", [p for p, n in inst.station(sid)["plugs"].items() if n > 0] or ["-"])
-    if st.button("Set to 0 plugs and re-plan", disabled=plug == "-"):
+    used_sids = {s for s, _ in uses}
+    sid = st.selectbox("Station", [s["station_id"] for s in inst.stations],
+                       format_func=lambda s: f"{s}  ⚡ used" if s in used_sids else s)
+    plugs = {p: n for p, n in inst.station(sid)["plugs"].items() if n > 0}
+    plug = st.selectbox("Plug type", list(plugs) or ["-"],
+                        format_func=lambda p: f"{p} ×{plugs[p]}" + (f"  (used by {', '.join(uses[sid, p])})" if (sid, p) in uses else "  (unused)")
+                        if p in plugs else p)
+    new_n = st.number_input("New plug count", 0, max(plugs.get(plug, 1) - 1, 0), 0) if plug in plugs else 0
+    if plug in plugs and (sid, plug) not in uses:
+        st.caption("No vehicle in this plan charges here, so breaking it will not change anything. Pick a ⚡ station.")
+    if st.button("Break charger and re-plan", disabled=plug not in plugs):
         from solver.heuristic import apply_overrides, solve_heuristic
-        overrides = {sid: {plug: 0}}
-        with st.spinner("Re-planning with the heuristic ..."):
+        overrides = {sid: {plug: int(new_n)}}
+        broken = apply_overrides(inst, overrides)
+        with st.spinner("Re-planning with the heuristic and simulating both plans ..."):
+            orig_broken, _ = simulated({**plan, "meta": {**plan.get("meta", {}), "simulated": False}}, broken)
             new_plan, _ = solve_heuristic(inst, station_overrides=overrides)
-        st.session_state["replan"] = (name, overrides, new_plan, apply_overrides(inst, overrides))
+            new_plan["meta"] = {"solver": "heuristic re-plan", "simulated": False}
+            replanned, _ = simulated(new_plan, broken)
+        orig_broken["meta"]["solver"] = f"{plan.get('meta', {}).get('solver', '')} (not re-planned)"
+        st.session_state["replan"] = (name, f"{sid} {plug}: {plugs[plug]} → {int(new_n)}", broken, orig_broken, replanned)
 
 replan = st.session_state.get("replan")
+compare = None
 if replan and replan[0] == name:
-    _, overrides, new_plan, broken_inst = replan
-    view = st.sidebar.radio("Show", ["Loaded plan", f"Re-planned ({', '.join(f'{s} {p}=0' for s, d in overrides.items() for p in d)})"])
-    if view != "Loaded plan":
-        plan, inst = new_plan, broken_inst
+    _, label, broken_inst, orig_broken, replanned = replan
+    views = {"Loaded plan": (plan, inst),
+             f"Charger broken, original plan ({label})": (orig_broken, broken_inst),
+             f"Charger broken, re-planned ({label})": (replanned, broken_inst)}
+    view = st.sidebar.radio("Show", list(views))
+    compare = views
+    plan, inst = views[view]
 
 # ---------------------------------------------------------------- stats
 windows = {str(c): list(w) for c, w in inst.customer_window.items()}
-cost = calculate_route_cost(plan["routes"], inst.dist_km, windows, plan.get("unserved_customers", []))
+
+
+def summary(p, i):
+    sim, stats = simulated(p, i)
+    c = calculate_route_cost(sim["routes"], i.dist_km, windows, sim.get("unserved_customers", []))
+    n = sum(1 for r in sim["routes"] for cs in r.get("charging_stops", []) if cs.get("actual_charge_start") is not None)
+    return sim, c, n, stats
+
+
+sim_plan, cost, n_charged, sim_stats = summary(plan, inst)
 check = check_plan(plan, inst)
-n_charges = sum(len(r.get("charging_stops", [])) for r in plan["routes"])
 meta = plan.get("meta", {})
 
-st.sidebar.subheader("Plan summary")
+st.sidebar.subheader("Plan summary (simulated)")
 st.sidebar.metric("Total cost (objective.py)", f"{cost['total_score']:.1f}")
 st.sidebar.metric("Distance", f"{cost['distance_cost']:.1f} km")
-st.sidebar.metric("Avg queue wait / charge", f"{cost['raw_total_wait_minutes'] / n_charges:.1f} min" if n_charges else "no charging")
+st.sidebar.metric("Avg queue wait / charge",
+                  f"{cost['raw_total_wait_minutes'] / n_charged:.1f} min" if n_charged else "no charging",
+                  help="From the Reality Engine (FIFO queues per station and plug type). "
+                       "0 means no vehicle found its plug busy.")
 st.sidebar.metric("Unserved customers", cost["raw_unserved_count"])
-st.sidebar.metric("Plan checker", "feasible" if check["feasible"] else f"{len(check['violations'])} violations")
-st.sidebar.caption(f"Solver: {meta.get('solver', 'heuristic re-plan')} · "
-                   f"{'simulated' if meta.get('simulated') else 'planned (not yet simulated)'}")
+st.sidebar.metric("Stranded vehicles", sim_stats.get("n_stranded_vehicles", 0))
+st.sidebar.metric("Plan checker (as planned)", "feasible" if check["feasible"] else f"{len(check['violations'])} violations")
+st.sidebar.caption(f"Solver: {meta.get('solver', '?')} · stats from the Reality Engine simulator")
 
 # ---------------------------------------------------------------- main area
+if compare:
+    st.subheader("Break-a-charger comparison (all simulated)")
+    table = []
+    for label_, (p_, i_) in compare.items():
+        _, c_, n_, s_ = summary(p_, i_)
+        table.append({"Plan": label_, "Cost": round(c_["total_score"], 1), "km": round(c_["distance_cost"], 1),
+                      "Unserved": c_["raw_unserved_count"], "Stranded": s_.get("n_stranded_vehicles", 0),
+                      "Queue wait (min)": round(c_["raw_total_wait_minutes"], 1)})
+    st.dataframe(table, width="stretch", hide_index=True)
+
+plan = sim_plan
 rows = vehicle_rows(plan, inst)
 focus = st.selectbox("Zoom to vehicle", ["All vehicles"] + [r["Vehicle"] for r in rows])
 st.caption(f"{len(inst.customers)} customers · {len(plan['routes'])} of {len(inst.vehicles)} vehicles dispatched · "

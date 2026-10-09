@@ -20,6 +20,7 @@ from collections import deque
 from typing import Any, Dict, List, Tuple
 
 from solver.instance import Instance
+from solver.objective import late_minutes
 
 
 class StationPlugPool:
@@ -142,7 +143,9 @@ def simulate_plan(plan: dict, instance: Instance) -> Tuple[dict, dict]:
     def compute_departure_time(vid: str, from_idx: int, to_idx: int, finish_t: float) -> float:
         """
         Computes vehicle departure time from from_idx to to_idx (Fix E1).
-        Holds departure at previous stop so that arrival at customer is >= window_open.
+        Vehicles follow the plan's timing: they never arrive earlier than planned (they wait at the
+        previous stop instead), nor before a customer's window opens. Delays propagate (finish_t).
+        Holding at stations too stops a vehicle from grabbing a plug slot booked by another vehicle.
         """
         sim_r = vehicle_states[vid]["sim_r"]
         seq = sim_r["stop_sequence"]
@@ -150,15 +153,13 @@ def simulate_plan(plan: dict, instance: Instance) -> Tuple[dict, dict]:
         u, v = seq[from_idx], seq[to_idx]
         travel_t = instance.time(u, v)
 
+        planned_arr = planned_times[to_idx] if to_idx < len(planned_times) else 0.0
+        target_arr = planned_arr
         if v in instance.customer_window:
-            window_open, _ = instance.customer_window[v]
-            planned_arr = planned_times[to_idx] if to_idx < len(planned_times) else 0.0
-            target_arr = max(planned_arr, window_open)
-            return max(finish_t, target_arr - travel_t)
-        elif from_idx == 0 and to_idx < len(planned_times):
-            return max(finish_t, planned_times[to_idx] - travel_t)
-        else:
-            return finish_t
+            target_arr = max(planned_arr, instance.customer_window[v][0])
+        if v == seq[-1] and to_idx == len(seq) - 1:
+            return finish_t  # returning to the depot: no reason to wait
+        return max(finish_t, target_arr - travel_t)
 
     # Schedule initial departure from depot for each vehicle at t = planned_departure or 0.0
     for r in plan["routes"]:
@@ -166,9 +167,9 @@ def simulate_plan(plan: dict, instance: Instance) -> Tuple[dict, dict]:
         seq = r["stop_sequence"]
         if not seq:
             continue
-        vehicle_states[vid]["sim_r"]["actual_arrival_times"][0] = 0.0
+        vehicle_states[vid]["sim_r"]["actual_arrival_times"][0] = instance.depot_open_min
         if len(seq) > 1:
-            depart_t = compute_departure_time(vid, 0, 1, finish_t=0.0)
+            depart_t = compute_departure_time(vid, 0, 1, finish_t=instance.depot_open_min)
             push_event(
                 depart_t,
                 1,
@@ -256,9 +257,9 @@ def simulate_plan(plan: dict, instance: Instance) -> Tuple[dict, dict]:
                 # Vehicle arrives early -> absorbs slack by waiting at stop until window_a
                 service_start_t = max(arr_t, window_a)
 
-                # Check time window violation (arrived late)
-                if arr_t > window_b + 1e-6:
-                    late_min = arr_t - window_b
+                # Check time window violation (arrived late) -- shared rule with objective.py
+                late_min = late_minutes(arr_t, (window_a, window_b))
+                if late_min > 1e-6:
                     n_time_window_violations += 1
                     total_late_minutes += late_min
 

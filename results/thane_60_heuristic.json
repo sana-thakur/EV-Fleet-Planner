@@ -290,7 +290,7 @@
     "solver": "heuristic",
     "simulated": false,
     "info": {
-      "runtime_s": 21.515947959036566,
+      "runtime_s": 21.847726166946813,
       "n_unserved": 0,
       "internal_cost": 208.37300000000002
     },

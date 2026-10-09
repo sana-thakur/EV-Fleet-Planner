@@ -153,12 +153,13 @@
   "unserved_customers": [],
   "meta": {
     "customers_file": "data/customers_thane_25.json",
-    "solver": "heuristic",
+    "solver": "b2_capacity_blind",
     "simulated": false,
     "info": {
-      "runtime_s": 3.0749214579118416,
+      "runtime_s": 51.849671332980506,
       "n_unserved": 0,
-      "internal_cost": 123.592
+      "internal_cost": 123.592,
+      "baseline": "B2 (Capacity-Blind)"
     },
     "checker_feasible": true
   }

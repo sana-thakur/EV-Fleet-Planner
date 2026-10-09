@@ -78,8 +78,8 @@
     "info": {
       "status": "Time limit reached",
       "objective_km": 76.303,
-      "runtime_s": 300.1264162500156,
-      "mip_gap": 0.0804020759068962,
+      "runtime_s": 300.15348508406896,
+      "mip_gap": 0.08401918641224339,
       "n_vars": 2528,
       "n_constraints": 6266,
       "solver_name": "HiGHS"

@@ -298,20 +298,14 @@ def _build(inst: Instance, wait_weight: float, order: list) -> tuple[_State, lis
     return st, unserved
 
 
-def solve_heuristic(instance: Instance, station_overrides: dict | None = None,
-                    wait_weight: float = 0.5) -> tuple[dict, dict]:
-    t0 = time.perf_counter()
-    inst = apply_overrides(instance, station_overrides)
-    # Multi-start: keep the best (fewest unserved, then lowest cost; first ordering wins ties).
-    runs = [_build(inst, wait_weight, order) for order in _orderings(inst)]
-    st, unserved = min(runs, key=lambda run: (len(run[1]), run[0].total()))
-
-    routes = []
+def _routes_to_plan(inst: Instance, routes: dict, results: dict, unserved: list) -> dict:
+    """{vehicle: customer sequence} + {vehicle: RouteResult} -> the shared route-plan format."""
+    out = []
     for v in inst.vehicles:
         k = v["vehicle_id"]
-        if not st.routes[k]:
+        if not routes.get(k):
             continue
-        res = st.results[k]
+        res = results[k]
         stops = [inst.depot_node] + [s for s, _ in res.stops]
         times = [inst.depot_open_min] + [round(t, 4) for _, t in res.stops]
         charging = [{
@@ -320,10 +314,20 @@ def solve_heuristic(instance: Instance, station_overrides: dict | None = None,
             "wait_time_minutes": 0.0, "energy_requested_kwh": kwh,
             "planned_charge_start": round(start, 4),
         } for sid, p, _, start, _, kwh in res.charges]
-        routes.append({"vehicle_id": k, "stop_sequence": stops, "planned_arrival_times": times,
-                       "actual_arrival_times": list(times), "charging_stops": charging})
+        out.append({"vehicle_id": k, "stop_sequence": stops, "planned_arrival_times": times,
+                    "actual_arrival_times": list(times), "charging_stops": charging})
+    return {"routes": out, "unserved_customers": list(unserved)}
 
-    return {"routes": routes, "unserved_customers": unserved}, {
+
+def solve_heuristic(instance: Instance, station_overrides: dict | None = None,
+                    wait_weight: float = 0.5) -> tuple[dict, dict]:
+    t0 = time.perf_counter()
+    inst = apply_overrides(instance, station_overrides)
+    # Multi-start: keep the best (fewest unserved, then lowest cost; first ordering wins ties).
+    runs = [_build(inst, wait_weight, order) for order in _orderings(inst)]
+    st, unserved = min(runs, key=lambda run: (len(run[1]), run[0].total()))
+
+    return _routes_to_plan(inst, st.routes, st.results, unserved), {
         "runtime_s": time.perf_counter() - t0,
         "n_unserved": len(unserved),
         "internal_cost": st.total(),

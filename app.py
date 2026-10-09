@@ -162,8 +162,35 @@ if not plans:
                "(or python experiments/solve_thane.py for the demo plans).")
     st.stop()
 
-names = list(plans)
-name = st.sidebar.selectbox("Route plan", names, index=next((i for i, n in enumerate(names) if "heuristic" in n), 0))
+instances = ["thane_8", "thane_25", "thane_60"]
+selected_instance = st.sidebar.selectbox("Instance", instances, index=instances.index("thane_60"))
+
+algo_options = ["Heuristic", "B1 Greedy", "B2 Capacity-Blind", "B3 Type-Blind"]
+if selected_instance == "thane_8":
+    algo_options.append("MILP (Exact)")
+
+selected_algo = st.sidebar.selectbox("Algorithm", algo_options, index=0)
+
+algo_map = {
+    "Heuristic": "heuristic",
+    "B1 Greedy": "b1_greedy",
+    "B2 Capacity-Blind": "b2_capacity_blind",
+    "B3 Type-Blind": "b3_type_blind",
+    "MILP (Exact)": "milp",
+}
+
+slug = algo_map[selected_algo]
+sim_file = f"{selected_instance}_{slug}_simulated.json"
+raw_file = f"{selected_instance}_{slug}.json"
+
+if sim_file in plans:
+    name = sim_file
+elif raw_file in plans:
+    name = raw_file
+else:
+    st.sidebar.error(f"Plan file not found: {sim_file} or {raw_file}")
+    st.stop()
+
 plan = plans[name]
 inst = instance(plan["meta"]["customers_file"], os.path.getmtime(os.path.join(ROOT, "solver", "instance.py")))
 

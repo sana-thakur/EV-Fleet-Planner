@@ -1,0 +1,307 @@
+{
+  "routes": [
+    {
+      "vehicle_id": "V_2W_001",
+      "stop_sequence": [
+        13418006658,
+        "S_01_Panchpakhadi",
+        1643401380,
+        13418006658
+      ],
+      "planned_arrival_times": [
+        480.0,
+        483.578,
+        630,
+        657.156
+      ],
+      "actual_arrival_times": [
+        480.0,
+        483.578,
+        630,
+        657.156
+      ],
+      "charging_stops": [
+        {
+          "station_id": "S_01_Panchpakhadi",
+          "plug_type_used": "LEV",
+          "planned_arrival_time": 483.578,
+          "actual_arrival_time": 483.578,
+          "wait_time_minutes": 0.0,
+          "energy_requested_kwh": 0.5709,
+          "planned_charge_start": 483.578
+        }
+      ],
+      "stranded": false,
+      "stranding_reason": null
+    },
+    {
+      "vehicle_id": "V_2W_002",
+      "stop_sequence": [
+        13418006658,
+        "S_01_Panchpakhadi",
+        2440292896,
+        13418006658
+      ],
+      "planned_arrival_times": [
+        480.0,
+        483.578,
+        670,
+        701.656
+      ],
+      "actual_arrival_times": [
+        480.0,
+        483.578,
+        670,
+        701.656
+      ],
+      "charging_stops": [
+        {
+          "station_id": "S_01_Panchpakhadi",
+          "plug_type_used": "LEV",
+          "planned_arrival_time": 483.578,
+          "actual_arrival_time": 483.578,
+          "wait_time_minutes": 10.38,
+          "energy_requested_kwh": 0.7599,
+          "planned_charge_start": 493.958
+        }
+      ],
+      "stranded": false,
+      "stranding_reason": null
+    },
+    {
+      "vehicle_id": "V_2W_003",
+      "stop_sequence": [
+        13418006658,
+        "S_01_Panchpakhadi",
+        2237059896,
+        13418006658
+      ],
+      "planned_arrival_times": [
+        480.0,
+        483.578,
+        700,
+        732.784
+      ],
+      "actual_arrival_times": [
+        480.0,
+        483.578,
+        700,
+        732.784
+      ],
+      "charging_stops": [
+        {
+          "station_id": "S_01_Panchpakhadi",
+          "plug_type_used": "LEV",
+          "planned_arrival_time": 483.578,
+          "actual_arrival_time": 483.578,
+          "wait_time_minutes": 24.1964,
+          "energy_requested_kwh": 0.8226,
+          "planned_charge_start": 507.7744
+        }
+      ],
+      "stranded": false,
+      "stranding_reason": null
+    },
+    {
+      "vehicle_id": "V_2W_004",
+      "stop_sequence": [
+        13418006658,
+        "S_01_Panchpakhadi",
+        1643499291,
+        13418006658
+      ],
+      "planned_arrival_times": [
+        480.0,
+        483.578,
+        750,
+        774.664
+      ],
+      "actual_arrival_times": [
+        480.0,
+        483.578,
+        750,
+        774.664
+      ],
+      "charging_stops": [
+        {
+          "station_id": "S_01_Panchpakhadi",
+          "plug_type_used": "LEV",
+          "planned_arrival_time": 483.578,
+          "actual_arrival_time": 483.578,
+          "wait_time_minutes": 39.1527,
+          "energy_requested_kwh": 0.4627,
+          "planned_charge_start": 522.7307
+        }
+      ],
+      "stranded": false,
+      "stranding_reason": null
+    },
+    {
+      "vehicle_id": "V_2W_005",
+      "stop_sequence": [
+        13418006658,
+        13898105689,
+        13418006658
+      ],
+      "planned_arrival_times": [
+        480.0,
+        830,
+        842.118
+      ],
+      "actual_arrival_times": [
+        480.0,
+        830,
+        842.118
+      ],
+      "charging_stops": [],
+      "stranded": false,
+      "stranding_reason": null
+    },
+    {
+      "vehicle_id": "V_3W_001",
+      "stop_sequence": [
+        13418006658,
+        "S_01_Panchpakhadi",
+        11043864738,
+        13418006658
+      ],
+      "planned_arrival_times": [
+        480.0,
+        483.578,
+        860,
+        888.446
+      ],
+      "actual_arrival_times": [
+        480.0,
+        483.578,
+        860,
+        888.446
+      ],
+      "charging_stops": [
+        {
+          "station_id": "S_01_Panchpakhadi",
+          "plug_type_used": "Type2",
+          "planned_arrival_time": 483.578,
+          "actual_arrival_time": 483.578,
+          "wait_time_minutes": 0.0,
+          "energy_requested_kwh": 1.2987,
+          "planned_charge_start": 483.578
+        }
+      ],
+      "stranded": false,
+      "stranding_reason": null
+    },
+    {
+      "vehicle_id": "V_3W_002",
+      "stop_sequence": [
+        13418006658,
+        1647048989,
+        13418006658
+      ],
+      "planned_arrival_times": [
+        480.0,
+        540,
+        549.93
+      ],
+      "actual_arrival_times": [
+        480.0,
+        540,
+        549.93
+      ],
+      "charging_stops": [],
+      "stranded": false,
+      "stranding_reason": null
+    },
+    {
+      "vehicle_id": "V_3W_003",
+      "stop_sequence": [
+        13418006658,
+        3797832335,
+        13418006658
+      ],
+      "planned_arrival_times": [
+        480.0,
+        540,
+        554.084
+      ],
+      "actual_arrival_times": [
+        480.0,
+        540,
+        554.084
+      ],
+      "charging_stops": [],
+      "stranded": false,
+      "stranding_reason": null
+    }
+  ],
+  "unserved_customers": [],
+  "meta": {
+    "customers_file": "data/customers_thane_8.json",
+    "solver": "b1_greedy",
+    "simulated": false,
+    "info": {
+      "baseline": "B1 (Greedy FCFS)",
+      "runtime_s": 0.009101300034672022,
+      "n_unserved": 0,
+      "constraint_failures": [
+        "Vehicle V_2W_001 late arrival at customer 1643401380 (735.04 > 690.00)",
+        "Vehicle V_2W_002 late arrival at customer 2440292896 (739.54 > 730.00)",
+        "Vehicle V_2W_001 late arrival at customer 1643401380 (785.10 > 690.00)",
+        "Vehicle V_2W_002 late arrival at customer 2440292896 (788.46 > 730.00)",
+        "Vehicle V_2W_003 late arrival at customer 2237059896 (795.38 > 760.00)",
+        "Vehicle V_2W_001 late arrival at customer 1643401380 (878.42 > 690.00)",
+        "Vehicle V_2W_002 late arrival at customer 2440292896 (886.35 > 730.00)",
+        "Vehicle V_2W_003 late arrival at customer 2237059896 (889.35 > 760.00)",
+        "Vehicle V_2W_004 late arrival at customer 1643499291 (873.79 > 810.00)",
+        "Vehicle V_2W_001 late arrival at customer 1643401380 (890.70 > 690.00)",
+        "Vehicle V_2W_002 late arrival at customer 2440292896 (895.20 > 730.00)",
+        "Vehicle V_2W_003 late arrival at customer 2237059896 (878.46 > 760.00)",
+        "Vehicle V_2W_004 late arrival at customer 1643499291 (900.98 > 810.00)",
+        "Vehicle V_2W_005 late arrival at customer 13898105689 (890.07 > 890.00)",
+        "Vehicle V_2W_003 late arrival at customer 1643401380 (735.04 > 690.00)",
+        "Vehicle V_2W_004 late arrival at customer 2440292896 (739.54 > 730.00)",
+        "Vehicle V_2W_003 late arrival at customer 1643401380 (785.10 > 690.00)",
+        "Vehicle V_2W_004 late arrival at customer 2440292896 (788.46 > 730.00)",
+        "Vehicle V_2W_005 late arrival at customer 2237059896 (795.38 > 760.00)",
+        "Vehicle V_2W_003 late arrival at customer 1643401380 (878.42 > 690.00)",
+        "Vehicle V_2W_004 late arrival at customer 2440292896 (886.35 > 730.00)",
+        "Vehicle V_2W_005 late arrival at customer 2237059896 (889.35 > 760.00)",
+        "Vehicle V_3W_001 late arrival at customer 1643499291 (865.25 > 810.00)",
+        "Vehicle V_2W_003 late arrival at customer 1643401380 (890.70 > 690.00)",
+        "Vehicle V_2W_004 late arrival at customer 2440292896 (895.20 > 730.00)",
+        "Vehicle V_2W_005 late arrival at customer 2237059896 (878.46 > 760.00)",
+        "Vehicle V_3W_001 late arrival at customer 1643499291 (900.98 > 810.00)",
+        "Vehicle V_3W_002 late arrival at customer 13898105689 (890.07 > 890.00)",
+        "Vehicle V_2W_001 late arrival at customer 1643401380 (735.04 > 690.00)",
+        "Vehicle V_2W_002 late arrival at customer 2440292896 (739.54 > 730.00)",
+        "Vehicle V_2W_001 late arrival at customer 1643401380 (785.10 > 690.00)",
+        "Vehicle V_2W_002 late arrival at customer 2440292896 (788.46 > 730.00)",
+        "Vehicle V_2W_003 late arrival at customer 2237059896 (795.38 > 760.00)",
+        "Vehicle V_2W_001 late arrival at customer 1643401380 (878.42 > 690.00)",
+        "Vehicle V_2W_002 late arrival at customer 2440292896 (886.35 > 730.00)",
+        "Vehicle V_2W_003 late arrival at customer 2237059896 (889.35 > 760.00)",
+        "Vehicle V_2W_004 late arrival at customer 1643499291 (873.79 > 810.00)",
+        "Vehicle V_2W_001 late arrival at customer 1643401380 (890.70 > 690.00)",
+        "Vehicle V_2W_002 late arrival at customer 2440292896 (895.20 > 730.00)",
+        "Vehicle V_2W_003 late arrival at customer 2237059896 (878.46 > 760.00)",
+        "Vehicle V_2W_004 late arrival at customer 1643499291 (900.98 > 810.00)",
+        "Vehicle V_2W_005 late arrival at customer 13898105689 (890.07 > 890.00)",
+        "Vehicle V_2W_001 late arrival at customer 2440292896 (739.54 > 730.00)",
+        "Vehicle V_2W_001 late arrival at customer 2237059896 (878.46 > 760.00)",
+        "Vehicle V_2W_002 late arrival at customer 2440292896 (895.20 > 730.00)",
+        "Vehicle V_2W_001 late arrival at customer 1643401380 (735.04 > 690.00)",
+        "Vehicle V_2W_003 late arrival at customer 1643401380 (890.70 > 690.00)",
+        "Vehicle V_2W_001 late arrival at customer 2237059896 (795.38 > 760.00)",
+        "Vehicle V_2W_002 late arrival at customer 2440292896 (788.46 > 730.00)",
+        "Vehicle V_2W_003 late arrival at customer 1643499291 (900.98 > 810.00)",
+        "Vehicle V_2W_004 late arrival at customer 1643401380 (785.10 > 690.00)",
+        "Vehicle V_2W_001 late arrival at customer 2237059896 (889.35 > 760.00)",
+        "Vehicle V_2W_002 late arrival at customer 2440292896 (886.35 > 730.00)",
+        "Vehicle V_2W_003 late arrival at customer 13898105689 (890.07 > 890.00)",
+        "Vehicle V_2W_004 late arrival at customer 1643401380 (878.42 > 690.00)",
+        "Vehicle V_2W_005 late arrival at customer 1643499291 (873.79 > 810.00)"
+      ]
+    },
+    "checker_feasible": true
+  }
+}

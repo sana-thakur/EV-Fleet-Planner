@@ -21,7 +21,7 @@ This project formulates and solves **EVRPTW-HCC** — the Electric Vehicle Routi
 
 We validate a fast heuristic against the exact solver on small instances, and — most importantly — use a discrete-event **"Reality Engine" simulator** to measure the **Price of Ignoring Reality**: how badly naive routing plans (that ignore charger capacity or plug type) degrade once replayed under real FIFO queueing and plug constraints, compared to our proposed model.
 
-This repository contains the full mathematical formulation, solver and heuristic implementations, the simulator, experiment scripts, an interactive demo, and the accompanying IEEE conference manuscript.
+This repository contains the full mathematical formulation, solver and heuristic implementations, the simulator, experiment scripts, an interactive demo, and the accompanying SPRINGER conference manuscript.
 
 ---
 
